@@ -1,20 +1,8 @@
 import { createStore } from 'vuex'
-// import account from './modules/account'
-// import friends from './modules/friends'
-// import errors from "./modules/errors";
+import global from './modules/global'
 
 export default new createStore({
   modules: {
-    // account,
-    // friends,
-    // errors
+      global
   },
-  state: {
-    loading: false
-  },
-  mutations: {
-    setLoading(state, boolean) {
-      state.loading = boolean
-    },
-  }
 })
