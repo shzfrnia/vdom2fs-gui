@@ -1,22 +1,11 @@
 <template>
   <el-footer height="30px">
-    <el-tag size="mini">{{ 8 }}</el-tag>
+    <el-tag size="mini">{{ $store.getters.appVersion }}</el-tag>
   </el-footer>
 </template>
 
 <script>
-// import { remote } from "electron";
-const { remote } = require("electron")
-
 export default {
-  data() {
-    return {
-      appVersion: 1,
-    };
-  },
-  created() {
-    console.log(remote);
-  }
 };
 </script>
 

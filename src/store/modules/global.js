@@ -1,5 +1,6 @@
 const state = {
   loading: false,
+  packageVersion: process.env.PACKAGE_VERSION || '0'
 };
 
 const mutations = {
@@ -8,12 +9,16 @@ const mutations = {
   },
 };
 
-const getters = {};
+const getters = {
+  appVersion: (state) => {
+    return state.packageVersion
+  }
+};
 
 const actions = {};
 
 export default {
-  namespaced: true,
+  namespace: false,
   state,
   mutations,
   getters,
