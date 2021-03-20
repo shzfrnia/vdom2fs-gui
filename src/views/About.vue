@@ -1,25 +1,17 @@
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
-    <div>{{ $store.state.global.loading }}</div>
-  </div>
+  <default />
 </template>
 <script>
 import sendToPython from "../api/index";
-// import { exec } from 'child_process'
-
+import Default from "../layouts/Default"
 
 export default {
-  setup() {
+  components: {
+    Default
   },
+  setup() {},
   created() {
-    // exec('ls -lah /tmp', function(error, stdout, stderr) {
-    //   console.log(error, stdout, stderr);
-    // });
-    // exec('ls -lah /tmp', function(error, stdout, stderr) {
-    //   console.log(error,stdout, stderr);
-    // });
     sendToPython();
-  }
+  },
 };
 </script>
