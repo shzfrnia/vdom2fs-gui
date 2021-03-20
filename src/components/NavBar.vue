@@ -1,57 +1,42 @@
 
 <template>
-    <el-col>
-      <el-menu
-        default-active="2"
-        class="el-menu-vertical-demo"
-        @open="handleOpen"
-        @close="handleClose"
-      >
-        <el-submenu index="1">
-          <template #title>
-            <i class="el-icon-location"></i>
-            <span>Navigator One</span>
-          </template>
-          <el-menu-item-group title="Group One">
-            <el-menu-item index="1-1">item one</el-menu-item>
-            <el-menu-item index="1-2">item one</el-menu-item>
-          </el-menu-item-group>
-          <el-menu-item-group title="Group Two">
-            <el-menu-item index="1-3">item three</el-menu-item>
-          </el-menu-item-group>
-          <el-submenu index="1-4">
-            <template #title>item four</template>
-            <el-menu-item index="1-4-1">item one</el-menu-item>
-          </el-submenu>
-        </el-submenu>
-        <el-menu-item index="2">
-          <i class="el-icon-menu"></i>
-          <span>Navigator Two</span>
-        </el-menu-item>
-        <el-menu-item index="3" disabled>
-          <i class="el-icon-document"></i>
-          <span>Navigator Three</span>
-        </el-menu-item>
-        <el-menu-item index="4">
-          <i class="el-icon-setting"></i>
-          <span>Navigator Four</span>
-        </el-menu-item>
+  <el-row>
+    <el-col :span="24">
+      <el-menu class="el-menu-vertical-demo">
+        <router-link to="/">
+          <el-menu-item>
+            <i class="el-icon-menu"></i>
+            <span>app1</span>
+          </el-menu-item>
+        </router-link>
+        <router-link to="/about">
+          <el-menu-item>
+            <i class="el-icon-menu"></i>
+            <span>app2</span>
+          </el-menu-item>
+        </router-link>
       </el-menu>
     </el-col>
+  </el-row>
 </template>
 
 <script>
-export default {
-  methods: {
-    handleOpen(key, keyPath) {
-      console.log(key, keyPath);
-    },
-    handleClose(key, keyPath) {
-      console.log(key, keyPath);
-    },
-  },
-};
+export default {};
 </script>
 
 <style>
+a {
+  text-decoration: none;
+  text-align: left;
+}
+
+.router-link-active span,
+.router-link-active i {
+  color: #409eff !important;
+}
+
+.el-row {
+  height: 100%;
+  background: white;
+}
 </style>

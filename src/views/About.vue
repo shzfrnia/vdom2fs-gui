@@ -1,13 +1,13 @@
 <template>
-  <default />
+  <default>About</default>
 </template>
 <script>
 import sendToPython from "../api/index";
-import Default from "../layouts/Default"
+import Default from "../layouts/Default";
 
 export default {
   components: {
-    Default
+    Default,
   },
   setup() {},
   created() {
