@@ -10,7 +10,7 @@ const mutations = {
 };
 
 const getters = {
-  appVersion: (state) => {
+  appVersion(state) {
     return state.packageVersion
   }
 };
@@ -18,7 +18,7 @@ const getters = {
 const actions = {};
 
 export default {
-  namespace: false,
+  namespaced: false,
   state,
   mutations,
   getters,
