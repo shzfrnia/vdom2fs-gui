@@ -18,8 +18,9 @@ async function createWindow() {
     height: 600,
     minWidth:800,
     minHeight: 600,
+    // Use pluginOptions.nodeIntegration, leave this alone
     webPreferences: {
-      // Use pluginOptions.nodeIntegration, leave this alone
+      enableRemoteModule: true,
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION
     }
