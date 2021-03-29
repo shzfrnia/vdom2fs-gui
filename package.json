@@ -1,5 +1,6 @@
 {
   "name": "vdom2fs-gui",
+  "description": "GUI for vdom2sf scripts.",
   "version": "0.1.0",
   "private": true,
   "scripts": {
