@@ -1,19 +1,19 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
 import store from '@/store/index'
 
 const redirectIfVdom2fsIsNotSeted = (to, from, next) => {
   if (!store.getters['vdom2fs/pathIsSetted']) {
-    next();
+    next('/setup');
     return;
   }
-  next('/setup')
+  next();
 }
 
 const routes = [
   {
     path: '/',
     name: 'Home',
-    component: () => import('@/views/About.vue'),
+    component: () => import('@/views/Home.vue'),
     beforeEnter: redirectIfVdom2fsIsNotSeted
   },
   {
@@ -31,7 +31,7 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: process.env.IS_ELECTRON ? createWebHashHistory() : createWebHistory(),
   routes
 })
 
