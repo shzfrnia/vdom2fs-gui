@@ -1,15 +1,4 @@
-import { PythonShell } from "python-shell";
+import FileManager from "@/api/file-manager";
+import Python from "@/api/python-engine";
 
-function sendToPython() {
-  PythonShell.run("src/api/python/main.py", {
-    pythonPath: 'python',
-  }, function(err, results) {
-    console.log(results);
-    if (err) throw err;
-    // результаты - это массив, состоящий из сообщений, собранных во время выполнения
-    // console.log('results: ', results);
-    // result.textContent = results[0];
-  });
-}
-
-export default sendToPython;
+export { FileManager, Python };

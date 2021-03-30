@@ -1,5 +1,5 @@
 <template>
-    <default>Hello </default>
+    <default>Hello</default>
 </template>
 
 <script>
