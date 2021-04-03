@@ -3,7 +3,7 @@ import { FileManager } from "@/api/index";
 const vdom2fs_path = "vdom2fs_path";
 const vdom2fs_path_is_valid = "vdom2fs_path_is_valid";
 
-const state = {
+const state = () => ({
   pathToScripts: localStorage.getItem(vdom2fs_path) || "",
   pathIsValid: localStorage.getItem(vdom2fs_path_is_valid) || false,
   pathErrors: [],
@@ -11,7 +11,7 @@ const state = {
     exporter: "exporter.py",
     parse: "parse.py",
   },
-};
+});
 
 const mutations = {
   setPath(state, path) {
@@ -35,12 +35,15 @@ const getters = {
   pathIsSetted(state) {
     return state.pathToScripts !== "";
   },
+  currentPath(state) {
+    return state.pathToScripts;
+  },
   pathIsValid(state) {
-    return state.pathIsValid;
+    return state.pathIsValid === "true" || state.pathIsValid === true;
   },
   pathErrors(state) {
     return state.pathErrors;
-  }
+  },
 };
 
 const actions = {
