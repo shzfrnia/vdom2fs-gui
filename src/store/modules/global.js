@@ -1,7 +1,9 @@
-const state = {
+import notification from "@/store/modules/notification";
+
+const state = () => ({
   loading: false,
-  packageVersion: process.env.PACKAGE_VERSION || '0'
-};
+  packageVersion: process.env.PACKAGE_VERSION || "0",
+});
 
 const mutations = {
   setLoading(state, boolean) {
@@ -11,14 +13,17 @@ const mutations = {
 
 const getters = {
   appVersion(state) {
-    return state.packageVersion
-  }
+    return state.packageVersion;
+  },
+  loading(state) {
+    return state.loading;
+  },
 };
 
 const actions = {};
 
 export default {
-  namespaced: false,
+  modules: { notification },
   state,
   mutations,
   getters,
