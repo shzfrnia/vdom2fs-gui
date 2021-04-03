@@ -1,6 +1,12 @@
 
 <template>
-  <div class="common-layout">
+  <div
+    class="common-layout"
+    v-loading="$store.getters.loading"
+    element-loading-text="Loading..."
+    element-loading-spinner="el-icon-loading"
+    element-loading-background="rgba(0, 0, 0, 0.8)"
+  >
     <div class="el-header">
       <slot name="header" />
     </div>
