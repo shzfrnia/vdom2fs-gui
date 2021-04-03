@@ -2,7 +2,7 @@ import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router
 import store from '@/store/index'
 
 const redirectIfVdom2fsIsNotSeted = (to, from, next) => {
-  if (!store.getters['vdom2fs/pathIsSetted']) {
+  if (!store.getters['vdom2fs/pathIsValid']) {
     next('/setup');
     return;
   }
@@ -24,7 +24,7 @@ const routes = [
   },
   {
     path: '/setup',
-    name: 'setup',
+    name: 'Setup',
     component: () => import('@/views/SetUp.vue')
   },
 
