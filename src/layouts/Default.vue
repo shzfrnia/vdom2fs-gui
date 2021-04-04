@@ -18,7 +18,7 @@
 
 <script>
 import BaseLayout from "@/layouts/Base";
-import NavBar from "@/components/NavBar";
+import NavBar from "@/components/NavBar/NavBar";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 

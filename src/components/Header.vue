@@ -1,3 +1,3 @@
 <template>
-  <el-header>Header</el-header>
+  <el-header height="45px"></el-header>
 </template>

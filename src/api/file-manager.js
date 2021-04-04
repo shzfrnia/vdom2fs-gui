@@ -8,20 +8,23 @@ class FileManager {
     const exporterPath = path.join(_path, scripts.exporter);
     const parsePath = path.join(_path, scripts.parse);
     const fileNotFoundMessage = "File not found";
-    if (!await FileManager.fileExists(exporterPath)) {
+    if (!(await FileManager.fileExists(exporterPath))) {
       errors.push({ file: scripts.exporter, message: fileNotFoundMessage });
     }
-    if (!await FileManager.fileExists(parsePath)) {
+    if (!(await FileManager.fileExists(parsePath))) {
       errors.push({ file: scripts.parse, message: fileNotFoundMessage });
     }
     if (errors.length > 0) return { pathIsValid: false, errors };
     try {
       await Python.execute(exporterPath, { args: ["-h"] });
     } catch (error) {
-      errors.push({
-        file: scripts.exporter,
-        message: error.toString().slice(0),
-      });
+      const errorMessage = error.toString();
+      if (!errorMessage.includes("conf_file is required")) {
+        errors.push({
+          file: scripts.exporter,
+          message: errorMessage.slice(0),
+        });
+      }
     }
     try {
       await Python.execute(parsePath, { args: ["-h"] });

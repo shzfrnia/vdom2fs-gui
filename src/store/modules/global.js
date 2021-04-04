@@ -1,4 +1,5 @@
 import notification from "@/store/modules/notification";
+import configs from "@/store/modules/configs";
 
 const state = () => ({
   loading: false,
@@ -23,7 +24,7 @@ const getters = {
 const actions = {};
 
 export default {
-  modules: { notification },
+  modules: { notification, configs },
   state,
   mutations,
   getters,

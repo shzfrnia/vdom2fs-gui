@@ -18,7 +18,7 @@ export default {
     HeaderAndFooter,
   },
   computed: {
-    ...mapGetters("vdom2fs", ["pathErrors"]),
+    ...mapGetters("vdom2fs", ["pathErrors", "pathIsValid"]),
   },
   watch: {
     pathErrors() {
@@ -32,9 +32,12 @@ export default {
     chooseFolder() {
       remote.dialog
         .showOpenDialog({ properties: ["openDirectory"] })
-        .then((result) => {
+        .then(async (result) => {
           if (!result.canceled) {
-            this.checkVdom2fsFolderOnValid(result.filePaths[0]);
+            await this.checkVdom2fsFolderOnValid(result.filePaths[0]);
+            if (this.pathIsValid) {
+              this.$router.push({name: "Home"});
+            }
           }
         })
         .catch((err) => {

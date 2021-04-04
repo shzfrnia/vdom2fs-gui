@@ -1,12 +1,7 @@
 
 <template>
-  <div
-    class="common-layout"
-    v-loading="$store.getters.loading"
-    element-loading-text="Loading..."
-    element-loading-spinner="el-icon-loading"
-    element-loading-background="rgba(0, 0, 0, 0.8)"
-  >
+  <loader :loading="$store.getters.loading">
+  <div class="common-layout">
     <div class="el-header">
       <slot name="header" />
     </div>
@@ -22,7 +17,20 @@
       <slot name="footer" />
     </div>
   </div>
+  </loader>
 </template>
+
+<script>
+import Loader from "@/components/Loader";
+
+export default {
+  components: {
+    Loader
+  },
+};
+</script>
+
+
 
 <style scoped>
 .common-layout {

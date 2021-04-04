@@ -4,6 +4,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import { ipcRenderer } from "electron";
 
 export default {
   methods: {
@@ -13,6 +14,15 @@ export default {
     ...mapGetters("vdom2fs", ["currentPath"]),
   },
   async created() {
+    // renderer
+    window.addEventListener("contextmenu", (e) => {
+      e.preventDefault();
+      ipcRenderer.send("show-context-menu");
+    });
+
+    ipcRenderer.on("context-menu-command", (e, command) => {
+      console.error(e, command);
+    });
     this.$store.commit("setLoading", true);
     try {
       await this.checkVdom2fsFolderOnValid(this.currentPath);
