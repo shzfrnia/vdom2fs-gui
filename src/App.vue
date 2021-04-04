@@ -4,33 +4,26 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import { ipcRenderer } from "electron";
 
 export default {
   methods: {
     ...mapActions("vdom2fs", ["checkVdom2fsFolderOnValid"]),
+    async checkVdom2fsScripts() {
+      this.$store.commit("setLoading", true);
+      try {
+        await this.checkVdom2fsFolderOnValid(this.currentPath);
+      } catch (error) {
+        this.$router.router.push("Setup");
+      } finally {
+        this.$store.commit("setLoading", false);
+      }
+    },
   },
   computed: {
     ...mapGetters("vdom2fs", ["currentPath"]),
   },
   async created() {
-    // renderer
-    window.addEventListener("contextmenu", (e) => {
-      e.preventDefault();
-      ipcRenderer.send("show-context-menu");
-    });
-
-    ipcRenderer.on("context-menu-command", (e, command) => {
-      console.error(e, command);
-    });
-    this.$store.commit("setLoading", true);
-    try {
-      await this.checkVdom2fsFolderOnValid(this.currentPath);
-    } catch (error) {
-      this.$router.router.push("Setup");
-    } finally {
-      this.$store.commit("setLoading", false);
-    }
+    this.checkVdom2fsScripts();
   },
 };
 </script>

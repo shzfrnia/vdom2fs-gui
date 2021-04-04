@@ -1,9 +1,10 @@
 "use strict";
 
-import { app, protocol, BrowserWindow, Menu, ipcMain } from "electron";
+import { app, protocol, BrowserWindow, Menu } from "electron";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import menuTemplate from "@/api/top-menu-template";
 import contextMenuTemplate from "@/api/context-menu-template";
+import contextMenu from "electron-context-menu";
 
 // Not supported in vue 3
 // import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
@@ -16,6 +17,12 @@ protocol.registerSchemesAsPrivileged([
   { scheme: "app", privileges: { secure: true, standard: true } },
 ]);
 
+// Setup context menu
+contextMenu({
+  prepend: (defaultActions, parameters, browserWindow) =>
+    contextMenuTemplate(defaultActions, parameters, browserWindow),
+});
+
 async function createWindow() {
   // Create the browser window.
   const win = new BrowserWindow({
@@ -27,6 +34,7 @@ async function createWindow() {
     webPreferences: {
       enableRemoteModule: true,
       contextIsolation: false,
+      spellcheck: true,
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
     },
@@ -94,10 +102,3 @@ if (isDevelopment) {
     });
   }
 }
-
-ipcMain.on("show-context-menu", (event) => {
-  console.log(event.getType);
-  Menu.buildFromTemplate(contextMenuTemplate(event)).popup(
-    BrowserWindow.fromWebContents(event.sender)
-  );
-});

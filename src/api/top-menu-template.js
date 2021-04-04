@@ -14,6 +14,13 @@ export default (isMac) => [
             { role: "unhide" },
             { type: "separator" },
             { role: "quit" },
+            {
+              label: "reset vdom2fs",
+              click: async () => {
+                const { shell } = require("electron");
+                await shell.openExternal("https://electronjs.org");
+              },
+            },
           ],
         },
       ]
