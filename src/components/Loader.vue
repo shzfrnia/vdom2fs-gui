@@ -5,7 +5,8 @@
     element-loading-text="Loading..."
     element-loading-spinner="el-icon-loading"
     element-loading-background="rgba(0, 0, 0, 0.8)"
-    style="width: 100%; height: 100%;"
+    style="width: 100%; height: 100%"
+    :class="{loading : loading}"
   >
     <slot />
   </div>
@@ -22,6 +23,8 @@ export default {
 };
 </script>
 
-<style>
-
+<style scoped>
+.loading {
+  cursor: wait;
+}
 </style>

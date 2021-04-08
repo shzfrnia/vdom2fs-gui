@@ -3,7 +3,7 @@
 import { app, protocol, BrowserWindow, Menu } from "electron";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import menuTemplate from "@/api/top-menu-template";
-import contextMenuTemplate from "@/api/context-menu-template";
+import contextMenuTemplate from "@/api/context-menu/global-menu-template";
 import contextMenu from "electron-context-menu";
 
 // Not supported in vue 3

@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="to">
+  <router-link @contextmenu="foo" :to="to">
     <el-menu-item>
       <i :class="icon" />
       <span>{{ label }}</span>
@@ -8,6 +8,10 @@
 </template>
 
 <script>
+import { remote } from "electron";
+import menuItemContextMenuTemplate from "@/api/context-menu/menu-item-template";
+const { Menu } = remote;
+
 export default {
   props: {
     to: {
@@ -23,6 +27,13 @@ export default {
       required: true,
     },
   },
+  methods: {
+    foo() {
+      const menu = Menu.buildFromTemplate(menuItemContextMenuTemplate(window));
+
+      menu.popup({ window: remote.getCurrentWindow() });
+    },
+  },
 };
 </script>
 
@@ -30,6 +41,7 @@ export default {
 a {
   text-decoration: none;
   text-align: left;
+  user-select: none;
 }
 
 .router-link-active span,
