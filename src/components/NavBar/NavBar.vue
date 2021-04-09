@@ -30,7 +30,7 @@ import menuItemContextSetup from "@/api/context-menu/menu-item-context/menu-item
 
 export default {
   setup() {
-    return { openMenuItemContext: menuItemContextSetup() };
+    return { ...menuItemContextSetup() };
   },
   components: { NavBarItem },
   computed: {

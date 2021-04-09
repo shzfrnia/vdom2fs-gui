@@ -1,4 +1,4 @@
-export default (config, window, store) => [
+export default (config, window, store, variables) => [
   {
     label: config.favorite ? "remove from favorite" : "add to favorite",
     click() {
@@ -15,15 +15,24 @@ export default (config, window, store) => [
     },
   },
   {
+    label: "reorder",
+    checked: variables.reorder.value,
+    type: "checkbox",
+    click() {
+      variables.reorder.value = !variables.reorder.value;
+    },
+  },
+  {
     label: "edit",
     click() {
       window.alert("edit");
     },
   },
+  { type: "separator" },
   {
     label: "remove",
     click() {
-      window.alert("remove");
+      store.commit("configs/removeConfig", config.app_id);
     },
   },
 ];

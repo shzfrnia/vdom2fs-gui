@@ -30,10 +30,10 @@ const mutations = {
     state.configs.push(config);
   },
   removeConfig(state, id) {
-    console.warn(`Not implemented ${id} ${state}`);
+    state.configs = state.configs.filter((el) => el.app_id !== id);
   },
   setFavorites(state, { id, bool }) {
-    state.configs.filter((el) => el.app_id == id)[0].favorite = bool;
+    state.configs.filter((el) => el.app_id === id)[0].favorite = bool;
   },
 };
 
