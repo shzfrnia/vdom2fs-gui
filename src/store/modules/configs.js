@@ -32,6 +32,9 @@ const mutations = {
   removeConfig(state, id) {
     console.warn(`Not implemented ${id} ${state}`);
   },
+  setFavorites(state, { id, bool }) {
+    state.configs.filter((el) => el.app_id == id)[0].favorite = bool;
+  },
 };
 
 const getters = {
@@ -39,10 +42,10 @@ const getters = {
     return state.configs;
   },
   favoritesConfigs(state, getters) {
-    return getters.configs.filter(el => el.favorite);
+    return getters.configs.filter((el) => el.favorite);
   },
   notFavoritesConfigs(state, getters) {
-    return getters.configs.filter(el => !el.favorite);
+    return getters.configs.filter((el) => !el.favorite);
   },
 };
 

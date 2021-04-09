@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import NavBarItem from "@/components/NavBar/NavBarItem";
+import NavBarItem from "./NavBarItem";
 import { mapGetters } from "vuex";
 import menuItemContextSetup from "@/api/context-menu/menu-item-context/menu-item-context-setup";
 

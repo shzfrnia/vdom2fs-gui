@@ -1,8 +1,11 @@
-export default (config, window, callbacks) => [
+export default (config, window, store) => [
   {
     label: config.favorite ? "remove from favorite" : "add to favorite",
     click() {
-      callbacks?.favorite("asd");
+      store.commit("configs/setFavorites", {
+        id: config.app_id,
+        bool: !config.favorite,
+      });
     },
   },
   {
