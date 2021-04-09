@@ -35,6 +35,9 @@ const mutations = {
   setFavorites(state, { id, bool }) {
     state.configs.filter((el) => el.app_id === id)[0].favorite = bool;
   },
+  updateConfigs(state, configs) {
+    state.configs = configs;
+  },
 };
 
 const getters = {

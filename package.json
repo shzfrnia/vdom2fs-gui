@@ -20,6 +20,7 @@
     "python-shell": "^2.0.3",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
+    "vuedraggable": "^4.0.1",
     "vuex": "^4.0.0"
   },
   "devDependencies": {

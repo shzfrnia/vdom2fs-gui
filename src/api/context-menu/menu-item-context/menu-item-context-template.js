@@ -9,6 +9,12 @@ export default (config, window, store, variables) => [
     },
   },
   {
+    label: "edit",
+    click() {
+      window.alert("edit");
+    },
+  },
+  {
     label: "export",
     click() {
       window.alert("export");
@@ -20,12 +26,6 @@ export default (config, window, store, variables) => [
     type: "checkbox",
     click() {
       variables.reorder.value = !variables.reorder.value;
-    },
-  },
-  {
-    label: "edit",
-    click() {
-      window.alert("edit");
     },
   },
   { type: "separator" },
