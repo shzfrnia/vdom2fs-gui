@@ -1,12 +1,16 @@
 <template>
-  <el-dialog :title="dialogTitle" :model-value="modelValue">
+  <el-dialog
+    :title="dialogTitle"
+    :model-value="modelValue"
+    :before-close="closeDialog"
+  >
     <slot name="dialog-content" />
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="closeDialog">
-          Cancel
+        <el-button @click="closeDialog"> Cancel </el-button>
+        <el-button type="primary" @click="$emit('confirm-click')">
+          Confirm
         </el-button>
-        <el-button type="primary" @click="closeDialog"> Confirm </el-button>
       </span>
     </template>
   </el-dialog>
@@ -15,12 +19,7 @@
 <script>
 export default {
   inheritAttrs: false,
-  emits: [
-    "close-click",
-    "confirm-click",
-    "header-close-click",
-    "update:modelValue",
-  ],
+  emits: ["confirm-click", "update:modelValue"],
   props: {
     modelValue: {
       type: Boolean,
