@@ -55,7 +55,7 @@ export default {
   name: "Home",
   data() {
     return {
-      dialogVisible: true,
+      dialogVisible: false,
       form: {
         appId: "",
         name: "",
