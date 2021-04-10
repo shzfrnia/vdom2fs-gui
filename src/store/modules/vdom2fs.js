@@ -48,6 +48,7 @@ const getters = {
 
 const actions = {
   async checkVdom2fsFolderOnValid({ commit, state }, path) {
+    commit("setLoading", true, { root: true });
     const {
       pathIsValid,
       errors,
@@ -58,6 +59,7 @@ const actions = {
     commit("setPathValidState", pathIsValid);
     commit("setPathErrors", errors);
     commit("setPath", path);
+    commit("setLoading", false, { root: true });
   },
 };
 

@@ -1,3 +1,5 @@
+import router from "@/router/index";
+
 const state = () => ({
   configs: [
     {
@@ -29,7 +31,12 @@ const mutations = {
   addConfig(state, config) {
     state.configs.push(config);
   },
+  // FIXME TODO this is async action
   removeConfig(state, id) {
+    const currentRoute = router.currentRoute.value;
+    if (currentRoute.name == "Config" && currentRoute.params.id == id) {
+      router.push({ name: "Home" });
+    }
     state.configs = state.configs.filter((el) => el.app_id !== id);
   },
   setFavorites(state, { id, bool }) {

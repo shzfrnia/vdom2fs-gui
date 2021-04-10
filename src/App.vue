@@ -8,22 +8,12 @@ import { mapActions, mapGetters } from "vuex";
 export default {
   methods: {
     ...mapActions("vdom2fs", ["checkVdom2fsFolderOnValid"]),
-    async checkVdom2fsScripts() {
-      this.$store.commit("setLoading", true);
-      try {
-        await this.checkVdom2fsFolderOnValid(this.currentPath);
-      } catch (error) {
-        this.$router.router.push("Setup");
-      } finally {
-        this.$store.commit("setLoading", false);
-      }
-    },
   },
   computed: {
     ...mapGetters("vdom2fs", ["currentPath"]),
   },
   async created() {
-    this.checkVdom2fsScripts();
+    this.checkVdom2fsFolderOnValid(this.currentPath);
   },
 };
 </script>
