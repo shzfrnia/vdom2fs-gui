@@ -21,7 +21,7 @@ export default {
     ...mapMutations("configs", ["updateConfigs"]),
   },
   computed: {
-    ...mapGetters("configs", ["notFavoritesConfigs", "favoritesConfigs"]),
+    ...mapGetters("configs", ["favoritesConfigs"]),
     configs: {
       get() {
         return this.$store.state.global.configs.configs;

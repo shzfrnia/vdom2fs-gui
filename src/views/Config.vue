@@ -1,6 +1,6 @@
 <template>
   <default>
-    <div>{{ $route.params.id }}</div>
+    <div>{{ config.name }}</div>
     <div class="block">
       <el-timeline>
         <el-timeline-item timestamp="2018/4/12" placement="top">
@@ -31,5 +31,15 @@ import Default from "@/layouts/Default";
 
 export default {
   components: { Default },
+  data() {
+    return {
+      config: {},
+    };
+  },
+  async created() {
+    this.config = this.$store.state.global.configs.configs.filter(
+      (e) => e.app_id == this.$route.params.id
+    )[0];
+  },
 };
 </script>
