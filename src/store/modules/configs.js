@@ -1,36 +1,20 @@
 import router from "@/router/index";
 
+const localStorageKey = "configs";
+
+const updateLocalSotrage = (configs) => {
+  localStorage.setItem(localStorageKey, JSON.stringify(configs));
+};
+
 const state = () => ({
-  configs: [
-    {
-      appId: 1,
-      name: "logos",
-      url: "/asd",
-      user: "sha",
-      passMd5: "123",
-      favorite: true,
-    },
-    {
-      appId: 2,
-      name: "portal",
-      url: "/asd",
-      user: "sha",
-      passMd5: "123",
-    },
-    {
-      appId: 3,
-      name: "MUP",
-      url: "/asd",
-      user: "sha",
-      passMd5: "123",
-    },
-  ],
+  configs: JSON.parse(localStorage.getItem(localStorageKey) || "[]"),
 });
 
 const mutations = {
   // TODO add validation on uniq
   addConfig(state, config) {
     state.configs.push(config);
+    updateLocalSotrage(state.configs);
   },
   // FIXME TODO this is async action
   removeConfig(state, id) {
@@ -39,12 +23,15 @@ const mutations = {
       router.push({ name: "Home" });
     }
     state.configs = state.configs.filter((el) => el.appId !== id);
+    updateLocalSotrage(state.configs);
   },
   setFavorites(state, { id, bool }) {
     state.configs.filter((el) => el.appId === id)[0].favorite = bool;
+    updateLocalSotrage(state.configs);
   },
   updateConfigs(state, configs) {
     state.configs = configs;
+    updateLocalSotrage(state.configs);
   },
   // TODO add validations on uniq
   updateConfig(state, { oldConfig, newConfig }) {
@@ -53,6 +40,7 @@ const mutations = {
         state.configs[i] = newConfig;
       }
     }
+    updateLocalSotrage(state.configs);
   },
 };
 

@@ -39,7 +39,7 @@ export default (config, window, store, ipcRenderer, variables) => [
   {
     label: "remove",
     click() {
-      store.commit("configs/removeConfig", config.app_id);
+      store.commit("configs/removeConfig", config.appId);
     },
   },
 ];
