@@ -2,7 +2,12 @@
   <default>
     <div class="wrapper">
       <uploader accept=".txt" tip="Upload application config file or input" />
-      <el-button @click="openConfigDialog" size="medium" icon="el-icon-plus" circle />
+      <el-button
+        @click="openCreateConfigDialog"
+        size="medium"
+        icon="el-icon-plus"
+        circle
+      />
     </div>
   </default>
 </template>
@@ -16,8 +21,8 @@ export default {
   components: { Default, Uploader },
   name: "Home",
   methods: {
-    openConfigDialog() {
-      ipcRenderer.send("open-config-dialog", "ping");
+    openCreateConfigDialog() {
+      ipcRenderer.send("open-config-dialog", { config: {}, create: true });
     },
   },
 };

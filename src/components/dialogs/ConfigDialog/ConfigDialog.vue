@@ -14,9 +14,11 @@
 <script>
 import MyDialog from "@/components/dialogs/Dialog";
 import ConfigForm from "./ConfigForm";
+import { mapMutations } from "vuex";
 
+//TODO form falid flag for form.
 export default {
-  emits: ["created", "update:show"],
+  emits: ["update:show"],
   components: { MyDialog, ConfigForm },
   props: {
     show: {
@@ -31,14 +33,25 @@ export default {
       },
       required: true,
     },
+    createMode: {
+      type: Boolean,
+      required: true,
+    },
   },
   methods: {
+    ...mapMutations("configs", ["updateConfig", "addConfig"]),
     async onConfirmClick() {
+      const formDataCopy = { ...this.$refs.form.getFormState() };
+      if (!this.createMode) {
+        this.updateConfig({ oldConfig: this.config, newConfig: formDataCopy });
+      } else {
+        this.addConfig(formDataCopy);
+      }
       this.onDialogShowUpdate(false);
     },
     async onDialogShowUpdate(value) {
       if (!value) {
-        this.$refs.form.resetFields();
+        setTimeout(this.$refs.form.resetFields, 50);
       }
       this.$emit("update:show", value);
     },

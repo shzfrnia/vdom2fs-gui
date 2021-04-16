@@ -28,7 +28,10 @@ export default (isMac, win) => [
               label: "New config",
               accelerator: isMac ? "cmd+N" : "ctrl+N",
               click: async () => {
-                win.webContents.send("open-config-dialog", "he");
+                win.webContents.send("open-config-dialog", {
+                  config: {},
+                  create: true,
+                });
               },
             },
             { role: "close" },

@@ -1,6 +1,10 @@
 
 <template>
-  <config-dialog v-model:show="dialogVisible" :config="{}" />
+  <config-dialog
+    v-model:show="configDialog.visible"
+    :config="configDialog.config"
+    :createMode="configDialog.createMode"
+  />
   <loader :loading="$store.getters.loading">
     <div class="common-layout">
       <div class="el-header">
@@ -30,12 +34,18 @@ export default {
   components: { Loader, ConfigDialog },
   data() {
     return {
-      dialogVisible: false,
+      configDialog: {
+        visible: false,
+        createMode: false,
+        config: {}
+      }
     };
   },
   beforeCreate() {
-    ipcRenderer.on("open-config-dialog", () => {
-      this.dialogVisible = true;
+    ipcRenderer.on("open-config-dialog", (event, { config, create }) => {
+      this.configDialog.config = config;
+      this.configDialog.createMode = create;
+      this.configDialog.visible = true;
     });
   },
 };

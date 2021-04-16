@@ -3,6 +3,7 @@ import { ref } from "vue";
 import menuItemContextMenuTemplate from "./menu-item-context-template";
 const { Menu } = remote;
 import store from "@/store/index";
+import { ipcRenderer } from "electron";
 
 export default () => {
   const reorder = ref(false);
@@ -12,6 +13,7 @@ export default () => {
       config,
       window,
       store,
+      ipcRenderer,
       { reorder }
     );
     Menu.buildFromTemplate(contextMenuTemplate).popup({

@@ -1,9 +1,9 @@
-export default (config, window, store, variables) => [
+export default (config, window, store, ipcRenderer, variables) => [
   {
     label: config.favorite ? "remove from favorite" : "add to favorite",
     click() {
       store.commit("configs/setFavorites", {
-        id: config.app_id,
+        id: config.appId,
         bool: !config.favorite,
       });
     },
@@ -11,7 +11,14 @@ export default (config, window, store, variables) => [
   {
     label: "edit",
     click() {
-      window.alert("edit");
+      ipcRenderer.send("open-config-dialog", {
+        config: {
+          ...store.state.global.configs.configs.filter(
+            (e) => e.appId == config.appId
+          )[0],
+        },
+        create: false,
+      });
     },
   },
   {

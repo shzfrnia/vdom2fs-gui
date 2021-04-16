@@ -38,16 +38,15 @@ export default {
       },
     },
   },
+  beforeUpdate() {
+    this.fillForm();
+  },
+  mounted() {
+    this.fillForm();
+  },
   data() {
     return {
-      form: {
-        appId: "",
-        name: this.config.name,
-        url: "",
-        user: "",
-        passMd5: "",
-        favorite: false,
-      },
+      form: {},
       formRules: {
         name: [
           {
@@ -75,7 +74,14 @@ export default {
   methods: {
     async resetFields() {
       this.$refs.form.resetFields();
+    },
+    fillForm() {
+      this.resetFields();
+      this.form = {...this.config};
+    },
+    getFormState() {
+      return this.form;
     }
-  }
+  },
 };
 </script>

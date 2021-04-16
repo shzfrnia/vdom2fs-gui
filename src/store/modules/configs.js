@@ -3,31 +3,32 @@ import router from "@/router/index";
 const state = () => ({
   configs: [
     {
-      app_id: 1,
+      appId: 1,
       name: "logos",
       url: "/asd",
       user: "sha",
-      pass_md5: "123",
+      passMd5: "123",
       favorite: true,
     },
     {
-      app_id: 2,
+      appId: 2,
       name: "portal",
       url: "/asd",
       user: "sha",
-      pass_md5: "123",
+      passMd5: "123",
     },
     {
-      app_id: 3,
+      appId: 3,
       name: "MUP",
       url: "/asd",
       user: "sha",
-      pass_md5: "123",
+      passMd5: "123",
     },
   ],
 });
 
 const mutations = {
+  // TODO add validation on uniq
   addConfig(state, config) {
     state.configs.push(config);
   },
@@ -37,13 +38,21 @@ const mutations = {
     if (currentRoute.name == "Config" && currentRoute.params.id == id) {
       router.push({ name: "Home" });
     }
-    state.configs = state.configs.filter((el) => el.app_id !== id);
+    state.configs = state.configs.filter((el) => el.appId !== id);
   },
   setFavorites(state, { id, bool }) {
-    state.configs.filter((el) => el.app_id === id)[0].favorite = bool;
+    state.configs.filter((el) => el.appId === id)[0].favorite = bool;
   },
   updateConfigs(state, configs) {
     state.configs = configs;
+  },
+  // TODO add validations on uniq
+  updateConfig(state, { oldConfig, newConfig }) {
+    for (let i = 0; i < state.configs.length; i++) {
+      if (state.configs[i].appId === oldConfig.appId) {
+        state.configs[i] = newConfig;
+      }
+    }
   },
 };
 
