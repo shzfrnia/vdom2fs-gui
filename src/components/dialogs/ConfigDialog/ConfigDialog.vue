@@ -1,13 +1,13 @@
 <template>
   <my-dialog
     dialogTitle="Create application config"
-    @update:modelValue="this.$emit('update:show', $event)"
+    @update:modelValue="onDialogShowUpdate"
     :model-value="show"
     @confirm-click="onConfirmClick"
   >
     <template #dialog-content>
       <config-form ref="form" :config="config" />
-      </template>
+    </template>
   </my-dialog>
 </template>
 
@@ -33,13 +33,15 @@ export default {
     },
   },
   methods: {
-    async closeDialog() {
-      this.$emit("update:show", false);
-    },
     async onConfirmClick() {
-      this.$refs.form.resetFields();
-      this.closeDialog();
-    }
+      this.onDialogShowUpdate(false);
+    },
+    async onDialogShowUpdate(value) {
+      if (!value) {
+        this.$refs.form.resetFields();
+      }
+      this.$emit("update:show", value);
+    },
   },
 };
 </script>
