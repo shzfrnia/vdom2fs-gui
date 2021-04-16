@@ -1,4 +1,4 @@
-export default (isMac) => [
+export default (isMac, win) => [
   // { role: 'appMenu' }
   ...(isMac
     ? [
@@ -17,8 +17,7 @@ export default (isMac) => [
             {
               label: "reset vdom2fs",
               click: async () => {
-                const { shell } = require("electron");
-                await shell.openExternal("https://electronjs.org");
+                win.webContents.send('open-config-dialog', "mesage?");
               },
             },
           ],

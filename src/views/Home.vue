@@ -1,31 +1,24 @@
 <template>
   <default>
-    {{dialogVisible}}
     <div class="wrapper">
       <uploader accept=".txt" tip="Upload application config file or input" />
-      <el-button
-        @click="dialogVisible = true"
-        size="medium"
-        icon="el-icon-plus"
-        circle
-      />
+      <el-button @click="openConfigDialog" size="medium" icon="el-icon-plus" circle />
     </div>
-    <config-dialog v-model:show="dialogVisible" :config="{}" />
   </default>
 </template>
 
 <script>
 import Default from "@/layouts/Default";
 import Uploader from "@/components/inputs/Uploader";
-import ConfigDialog from "@/components/dialogs/ConfigDialog/ConfigDialog";
+import { ipcRenderer } from "electron";
 
 export default {
-  components: { Default, Uploader, ConfigDialog },
+  components: { Default, Uploader },
   name: "Home",
-  data() {
-    return {
-      dialogVisible: false,
-    };
+  methods: {
+    openConfigDialog() {
+      ipcRenderer.send("open-config-dialog", "ping");
+    },
   },
 };
 </script>

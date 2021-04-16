@@ -1,6 +1,6 @@
 "use strict";
 
-import { app, protocol, BrowserWindow, Menu } from "electron";
+import { app, protocol, BrowserWindow, Menu, ipcMain } from "electron";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import menuTemplate from "@/api/top-menu-template";
 import contextMenuTemplate from "@/api/context-menu/global-menu-template";
@@ -41,7 +41,7 @@ async function createWindow() {
   });
 
   // Init menu template
-  Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate(isMac)));
+  Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate(isMac, win)));
 
   // Menu bar settings
   //win.setMenuBarVisibility(false)
@@ -102,3 +102,7 @@ if (isDevelopment) {
     });
   }
 }
+
+ipcMain.on("open-config-dialog", (event, arg) => {
+  event.reply("open-config-dialog", arg);
+});

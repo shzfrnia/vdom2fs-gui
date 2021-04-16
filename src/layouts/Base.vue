@@ -1,31 +1,42 @@
 
 <template>
+  <config-dialog v-model:show="dialogVisible" :config="{}" />
   <loader :loading="$store.getters.loading">
-  <div class="common-layout">
-    <div class="el-header">
-      <slot name="header" />
-    </div>
-    <el-container class="body">
-      <slot name="aside" />
-      <el-container>
-        <el-main>
-          <slot />
-        </el-main>
+    <div class="common-layout">
+      <div class="el-header">
+        <slot name="header" />
+      </div>
+      <el-container class="body">
+        <slot name="aside" />
+        <el-container>
+          <el-main>
+            <slot />
+          </el-main>
+        </el-container>
       </el-container>
-    </el-container>
-    <div class="el-footer">
-      <slot name="footer" />
+      <div class="el-footer">
+        <slot name="footer" />
+      </div>
     </div>
-  </div>
   </loader>
 </template>
 
 <script>
 import Loader from "@/components/Loader";
+import ConfigDialog from "@/components/dialogs/ConfigDialog/ConfigDialog";
+import { ipcRenderer } from "electron";
 
 export default {
-  components: {
-    Loader
+  components: { Loader, ConfigDialog },
+  data() {
+    return {
+      dialogVisible: false,
+    };
+  },
+  beforeCreate() {
+    ipcRenderer.on("open-config-dialog", () => {
+      this.dialogVisible = true;
+    });
   },
 };
 </script>
