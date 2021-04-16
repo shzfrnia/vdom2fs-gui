@@ -14,12 +14,6 @@ export default (isMac, win) => [
             { role: "unhide" },
             { type: "separator" },
             { role: "quit" },
-            {
-              label: "reset vdom2fs",
-              click: async () => {
-                win.webContents.send('open-config-dialog', "mesage?");
-              },
-            },
           ],
         },
       ]
@@ -27,7 +21,20 @@ export default (isMac, win) => [
   // { role: 'fileMenu' }
   {
     label: "File",
-    submenu: [isMac ? { role: "close" } : { role: "quit" }],
+    submenu: [
+      ...(isMac
+        ? [
+            {
+              label: "New config",
+              accelerator: isMac ? "cmd+N" : "ctrl+N",
+              click: async () => {
+                win.webContents.send("open-config-dialog", "he");
+              },
+            },
+            { role: "close" },
+          ]
+        : [{ role: "quit" }]),
+    ],
   },
   // { role: 'editMenu' }
   {
