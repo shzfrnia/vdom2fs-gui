@@ -40,24 +40,13 @@ export default (isMac, win) => [
   {
     label: "Edit",
     submenu: [
-      { role: "undo" },
-      { role: "redo" },
-      { type: "separator" },
+      // { role: "undo" },
+      // { role: "redo" },
+      // { type: "separator" },
       { role: "cut" },
       { role: "copy" },
       { role: "paste" },
-      ...(isMac
-        ? [
-            { role: "pasteAndMatchStyle" },
-            { role: "delete" },
-            { role: "selectAll" },
-            { type: "separator" },
-            {
-              label: "Speech",
-              submenu: [{ role: "startSpeaking" }, { role: "stopSpeaking" }],
-            },
-          ]
-        : [{ role: "delete" }, { type: "separator" }, { role: "selectAll" }]),
+      ...(isMac ? [] : []),
     ],
   },
   // { role: 'viewMenu' }
@@ -65,12 +54,12 @@ export default (isMac, win) => [
     label: "View",
     submenu: [
       { role: "reload" },
-      { role: "forceReload" },
-      { role: "toggleDevTools" },
-      { type: "separator" },
-      { role: "resetZoom" },
-      { role: "zoomIn" },
-      { role: "zoomOut" },
+      // { role: "forceReload" },
+      // { role: "toggleDevTools" },
+      // { type: "separator" },
+      // { role: "resetZoom" },
+      // { role: "zoomIn" },
+      // { role: "zoomOut" },
       { type: "separator" },
       { role: "togglefullscreen" },
     ],
