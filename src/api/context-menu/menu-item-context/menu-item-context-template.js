@@ -3,7 +3,7 @@ export default (config, window, store, ipcRenderer, variables) => [
     label: config.favorite ? "remove from favorite" : "add to favorite",
     click() {
       store.commit("configs/setFavorites", {
-        id: config.appId,
+        id: config.id,
         bool: !config.favorite,
       });
     },
@@ -11,12 +11,13 @@ export default (config, window, store, ipcRenderer, variables) => [
   {
     label: "edit",
     click() {
+      const configCopy = {
+        ...store.state.global.configs.configs.filter(
+          (e) => e.id == config.id
+        )[0],
+      };
       ipcRenderer.send("open-config-dialog", {
-        config: {
-          ...store.state.global.configs.configs.filter(
-            (e) => e.appId == config.appId
-          )[0],
-        },
+        config: configCopy,
         create: false,
       });
     },
@@ -39,7 +40,7 @@ export default (config, window, store, ipcRenderer, variables) => [
   {
     label: "remove",
     click() {
-      store.commit("configs/removeConfig", config.appId);
+      store.commit("configs/removeConfig", config.id);
     },
   },
 ];

@@ -36,7 +36,7 @@ export default {
   methods: {
     async setupConfig() {
       this.config = this.$store.state.global.configs.configs.filter(
-        (e) => e.appId == this.$route.params.id
+        (e) => e.id == this.$route.params.id
       )[0];
     },
   },

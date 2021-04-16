@@ -2,33 +2,53 @@
   <el-form
     label-position="left"
     label-width="140px"
-    :model="form"
     :rules="formRules"
+    :model="config"
     ref="form"
+    @validate="onValidate"
   >
     <el-form-item label="Application name" prop="name">
-      <el-input v-model="form.name"></el-input>
+      <el-input
+        @update:model-value="updateField('name', $event)"
+        :model-value="config.name"
+      />
     </el-form-item>
     <el-form-item label="Application id" prop="appId">
-      <el-input v-model="form.appId"></el-input>
+      <el-input
+        @update:model-value="updateField('appId', $event)"
+        :model-value="config.appId"
+      />
     </el-form-item>
     <el-form-item label="Url" prop="url">
-      <el-input v-model="form.url"></el-input>
+      <el-input
+        @update:model-value="updateField('url', $event)"
+        :model-value="config.url"
+      />
     </el-form-item>
     <el-form-item label="User" prop="user">
-      <el-input v-model="form.user"></el-input>
+      <el-input
+        @update:model-value="updateField('user', $event)"
+        :model-value="config.user"
+      />
     </el-form-item>
     <el-form-item label="Password md5" prop="passMd5">
-      <el-input v-model="form.passMd5"></el-input>
+      <el-input
+        @update:model-value="updateField('passMd5', $event)"
+        :model-value="config.passMd5"
+      />
     </el-form-item>
     <el-form-item label="Add to favorite" prop="favorite">
-      <el-switch v-model="form.favorite"></el-switch>
+      <el-switch
+        @update:model-value="updateField('favorite', $event)"
+        :model-value="config.favorite"
+      />
     </el-form-item>
   </el-form>
 </template>
 
 <script>
 export default {
+  emits: ["update:form-valid", "update:config"],
   props: {
     config: {
       type: Object,
@@ -37,28 +57,26 @@ export default {
         return {};
       },
     },
-  },
-  beforeUpdate() {
-    this.fillForm();
-  },
-  mounted() {
-    this.fillForm();
+    formValid: {
+      type: Boolean,
+      default: true,
+      required: true,
+    },
   },
   data() {
     return {
-      form: {},
       formRules: {
         name: [
           {
             required: true,
             message: "Please input application name",
-            trigger: "blur",
+            trigger: ["blur"],
           },
           {
-            min: 3,
-            max: 5,
+            min: 1,
+            max: 10,
             message: "Length should be 3 to 5",
-            trigger: "blur",
+            trigger: "change",
           },
         ],
         appId: [
@@ -69,19 +87,35 @@ export default {
           },
         ],
       },
+      validatedFields: {},
     };
   },
   methods: {
+    async updateField(name, value) {
+      const configCopy = { ...this.config };
+      configCopy[name] = value;
+      this.$emit("update:config", configCopy);
+    },
+    async onValidate(name, result) {
+      this.validatedFields[name] = result;
+    },
     async resetFields() {
       this.$refs.form.resetFields();
     },
-    fillForm() {
-      this.resetFields();
-      this.form = {...this.config};
+    lockConfirmBtn() {
+      this.$emit("update:form-valid", this.config.id > 0);
     },
-    getFormState() {
-      return this.form;
-    }
+  },
+  watch: {
+    validatedFields: {
+      async handler(value) {
+        this.$emit(
+          "update:form-valid",
+          Object.entries(value).every((el) => el[1])
+        );
+      },
+      deep: true,
+    },
   },
 };
 </script>

@@ -14,7 +14,7 @@
           class="menu-item"
           :class="{ hide: showFavorites ^ (element.favorite == true) }"
           @contextmenu="openMenuItemContext(element)"
-          :to="{ name: 'Config', params: { id: element.appId } }"
+          :to="{ name: 'Config', params: { id: element.id } }"
           :label="element.name"
           :icon="reorder ? 'el-icon-d-caret' : 'el-icon-menu'"
         />

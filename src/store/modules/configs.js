@@ -6,6 +6,10 @@ const updateLocalSotrage = (configs) => {
   localStorage.setItem(localStorageKey, JSON.stringify(configs));
 };
 
+const generateNextId = async (configs, newConfig) => {
+  newConfig.id = configs.slice(-1)[0]?.id + 1 || 1;
+};
+
 const state = () => ({
   configs: JSON.parse(localStorage.getItem(localStorageKey) || "[]"),
 });
@@ -13,6 +17,7 @@ const state = () => ({
 const mutations = {
   // TODO add validation on uniq
   addConfig(state, config) {
+    generateNextId(state.configs, config);
     state.configs.push(config);
     updateLocalSotrage(state.configs);
   },
@@ -22,21 +27,20 @@ const mutations = {
     if (currentRoute.name == "Config" && currentRoute.params.id == id) {
       router.push({ name: "Home" });
     }
-    state.configs = state.configs.filter((el) => el.appId !== id);
+    state.configs = state.configs.filter((el) => el.id !== id);
     updateLocalSotrage(state.configs);
   },
   setFavorites(state, { id, bool }) {
-    state.configs.filter((el) => el.appId === id)[0].favorite = bool;
+    state.configs.filter((el) => el.id === id)[0].favorite = bool;
     updateLocalSotrage(state.configs);
   },
   updateConfigs(state, configs) {
     state.configs = configs;
     updateLocalSotrage(state.configs);
   },
-  // TODO add validations on uniq
-  updateConfig(state, { oldConfig, newConfig }) {
+  updateConfig(state, newConfig) {
     for (let i = 0; i < state.configs.length; i++) {
-      if (state.configs[i].appId === oldConfig.appId) {
+      if (state.configs[i].id === newConfig.id) {
         state.configs[i] = newConfig;
       }
     }
@@ -59,6 +63,9 @@ const getters = {
 const actions = {
   async addConfig({ commit }, config) {
     commit("addConfig", config);
+  },
+  async updateConfig({ commit }, newConfig) {
+    commit(newConfig.id < 0 ? "addConfig" : "updateConfig", newConfig);
   },
 };
 

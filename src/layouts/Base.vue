@@ -2,7 +2,7 @@
 <template>
   <config-dialog
     v-model:show="configDialog.visible"
-    :config="configDialog.config"
+    v-model:config="configDialog.config"
     :createMode="configDialog.createMode"
   />
   <loader :loading="$store.getters.loading">
@@ -36,22 +36,22 @@ export default {
     return {
       configDialog: {
         visible: false,
-        createMode: false,
-        config: {}
-      }
+        config: {},
+      },
     };
   },
   beforeCreate() {
     ipcRenderer.on("open-config-dialog", (event, { config, create }) => {
-      this.configDialog.config = config;
-      this.configDialog.createMode = create;
+      const configCopy = { ...config };
+      if (create) {
+        configCopy.id = -1;
+      }
+      this.configDialog.config = configCopy;
       this.configDialog.visible = true;
     });
   },
 };
 </script>
-
-
 
 <style scoped>
 .common-layout {

@@ -8,7 +8,7 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="closeDialog"> Cancel </el-button>
-        <el-button type="primary" @click="$emit('confirm-click')">
+        <el-button type="primary" :disabled="confirmBtnDisabled" @click="$emit('confirm-click')">
           Confirm
         </el-button>
       </span>
@@ -29,6 +29,11 @@ export default {
     dialogTitle: {
       type: String,
       default: "",
+      required: true,
+    },
+    confirmBtnDisabled: {
+      type: Boolean,
+      default: false,
       required: true,
     },
   },

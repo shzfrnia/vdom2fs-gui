@@ -4,9 +4,15 @@
     @update:modelValue="onDialogShowUpdate"
     :model-value="show"
     @confirm-click="onConfirmClick"
+    :confirm-btn-disabled="!formIsValid"
   >
     <template #dialog-content>
-      <config-form ref="form" :config="config" />
+      <config-form
+        ref="form"
+        v-model:form-valid="formIsValid"
+        :config="config"
+        @update:config="onConfigUpdate"
+      />
     </template>
   </my-dialog>
 </template>
@@ -14,11 +20,10 @@
 <script>
 import MyDialog from "@/components/dialogs/Dialog";
 import ConfigForm from "./ConfigForm";
-import { mapMutations } from "vuex";
+import { mapActions } from "vuex";
 
-//TODO form falid flag for form.
 export default {
-  emits: ["update:show"],
+  emits: ["update:show", "update:config"],
   components: { MyDialog, ConfigForm },
   props: {
     show: {
@@ -33,27 +38,30 @@ export default {
       },
       required: true,
     },
-    createMode: {
-      type: Boolean,
-      required: true,
-    },
+  },
+  data() {
+    return {
+      formIsValid: false,
+      changedConfig: this.config,
+    };
   },
   methods: {
-    ...mapMutations("configs", ["updateConfig", "addConfig"]),
+    ...mapActions("configs", ["updateConfig"]),
     async onConfirmClick() {
-      const formDataCopy = { ...this.$refs.form.getFormState() };
-      if (!this.createMode) {
-        this.updateConfig({ oldConfig: this.config, newConfig: formDataCopy });
-      } else {
-        this.addConfig(formDataCopy);
-      }
+      this.updateConfig(this.changedConfig);
       this.onDialogShowUpdate(false);
     },
     async onDialogShowUpdate(value) {
-      if (!value) {
-        setTimeout(this.$refs.form.resetFields, 50);
-      }
       this.$emit("update:show", value);
+    },
+    async onConfigUpdate(newValue) {
+      this.changedConfig = newValue;
+      this.$emit("update:config", newValue);
+    },
+  },
+  watch: {
+    async show() {
+      this.formIsValid = this.config.id > 0;
     },
   },
 };
