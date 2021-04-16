@@ -5,7 +5,9 @@
     :model-value="show"
     @confirm-click="onConfirmClick"
   >
-    <template #dialog-content> <config-form :config="config" /> </template>
+    <template #dialog-content>
+      <config-form ref="form" :config="config" />
+      </template>
   </my-dialog>
 </template>
 
@@ -35,6 +37,7 @@ export default {
       this.$emit("update:show", false);
     },
     async onConfirmClick() {
+      this.$refs.form.resetFields();
       this.closeDialog();
     }
   },

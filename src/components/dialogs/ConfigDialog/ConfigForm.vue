@@ -4,7 +4,7 @@
     label-width="140px"
     :model="form"
     :rules="formRules"
-    ref="configForm"
+    ref="form"
   >
     <el-form-item label="Application name" prop="name">
       <el-input v-model="form.name"></el-input>
@@ -72,5 +72,10 @@ export default {
       },
     };
   },
+  methods: {
+    async resetFields() {
+      this.$refs.form.resetFields();
+    }
+  }
 };
 </script>

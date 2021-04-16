@@ -10,7 +10,7 @@
         circle
       />
     </div>
-    <config-dialog v-model:show="dialogVisible" :config="{ name: 'test' }" />
+    <config-dialog v-model:show="dialogVisible" :config="{}" />
   </default>
 </template>
 
