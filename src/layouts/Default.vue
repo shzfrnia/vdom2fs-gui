@@ -1,16 +1,16 @@
 
 <template>
   <base-layout>
-    <template v-slot:header>
+    <template #header>
       <custom-header />
     </template>
-    <template v-slot:aside>
+    <template #aside>
       <el-aside style="width: 200px">
         <nav-bar />
       </el-aside>
     </template>
     <slot />
-    <template v-slot:footer>
+    <template #footer>
       <custom-footer />
     </template>
   </base-layout>

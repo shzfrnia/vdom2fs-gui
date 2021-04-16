@@ -1,9 +1,9 @@
 
 <template>
   <base-layout>
-    <template v-slot:header><custom-header /></template>
+    <template #header><custom-header /></template>
     <slot />
-    <template v-slot:footer><custom-footer /></template>
+    <template #footer><custom-footer /></template>
   </base-layout>
 </template>
 
