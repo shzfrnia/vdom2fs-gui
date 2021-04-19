@@ -102,9 +102,20 @@ export default {
     async resetFields() {
       this.$refs.form.resetFields();
     },
-    lockConfirmBtn() {
-      this.$emit("update:form-valid", this.config.id > 0);
+    async checkForm() {
+      this.$refs.form.validate((isValid, fields) => {
+        Object.entries(fields).forEach((el) => {
+          this.validatedFields[el[0]] = false;
+        });
+      });
+      this.$refs.form.clearValidate();
     },
+  },
+  async mounted() {
+    this.checkForm();
+  },
+  async updated() {
+    this.checkForm();
   },
   watch: {
     validatedFields: {
