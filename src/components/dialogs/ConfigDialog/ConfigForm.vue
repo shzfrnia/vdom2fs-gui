@@ -4,6 +4,7 @@
     label-width="140px"
     :rules="formRules"
     :model="config"
+    status-icon
     ref="form"
     @validate="onValidate"
   >
@@ -47,6 +48,8 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 export default {
   emits: ["update:form-valid", "update:config"],
   props: {
@@ -86,11 +89,30 @@ export default {
             trigger: "blur",
           },
         ],
+        url: [
+          {
+            required: true,
+            message: "Please input application url",
+            trigger: "blur",
+          },
+          {
+            required: true,
+            validator: async (rule, value, callback) => {
+              try {
+                await this.checkApplicationUrl(value);
+              } catch (e) {
+                callback(new Error(e));
+              }
+            },
+            trigger: "blur",
+          },
+        ],
       },
       validatedFields: {},
     };
   },
   methods: {
+    ...mapActions("vdom2fs", ["checkApplicationUrl"]),
     async updateField(name, value) {
       const configCopy = { ...this.config };
       configCopy[name] = value;

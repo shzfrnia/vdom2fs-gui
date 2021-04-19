@@ -1,4 +1,6 @@
 import { FileManager } from "@/api/index";
+import { remote } from "electron";
+const { net } = remote;
 
 const vdom2fs_path = "vdom2fs_path";
 const vdom2fs_path_is_valid = "vdom2fs_path_is_valid";
@@ -60,6 +62,18 @@ const actions = {
     commit("setPathErrors", errors);
     commit("setPath", path);
     commit("setLoading", false, { root: true });
+  },
+  async checkApplicationUrl(context, url) {
+    return new Promise((resolve, reject) => {
+      const request = net.request(`https://${url}`);
+      request.on("response", (response) => {
+        resolve(response.statusCode == 200);
+      });
+      request.on("error", (error) => {
+        reject(error);
+      });
+      request.end();
+    });
   },
 };
 
