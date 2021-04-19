@@ -107,6 +107,20 @@ export default {
             trigger: "blur",
           },
         ],
+        user: [
+          {
+            required: true,
+            message: "Please input user name",
+            trigger: "blur",
+          },
+        ],
+        passMd5: [
+          {
+            required: true,
+            message: "Please input md5 hash of passsword",
+            trigger: "blur",
+          },
+        ],
       },
       validatedFields: {},
     };
@@ -124,20 +138,14 @@ export default {
     async resetFields() {
       this.$refs.form.resetFields();
     },
-    async checkForm() {
+    async checkForm(clearValidate = false) {
       this.$refs.form.validate((isValid, fields) => {
         Object.entries(fields).forEach((el) => {
           this.validatedFields[el[0]] = false;
         });
       });
-      this.$refs.form.clearValidate();
+      if (clearValidate) this.$refs.form.clearValidate();
     },
-  },
-  async mounted() {
-    this.checkForm();
-  },
-  async updated() {
-    this.checkForm();
   },
   watch: {
     validatedFields: {

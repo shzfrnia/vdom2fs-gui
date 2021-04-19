@@ -58,10 +58,17 @@ export default {
       this.changedConfig = newValue;
       this.$emit("update:config", newValue);
     },
+    async checkForm() {
+      this.$refs.form.checkForm();
+    },
   },
   watch: {
-    async show() {
-      this.formIsValid = this.config.id > 0;
+    async show(value) {
+      if (value) {
+        setTimeout(() => {
+          this.$refs.form.checkForm(this.config.id < 0);
+        }, 1);
+      }
     },
   },
 };
