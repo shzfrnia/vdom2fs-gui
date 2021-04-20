@@ -1,33 +1,30 @@
 <template>
-  <default>
-    <el-timeline>
-      <el-timeline-item timestamp="2018/4/12" placement="top">
-        <el-card>
-          <h4>{{ config.name }}</h4>
-          <p>Tom committed 2018/4/12 20:46</p>
-        </el-card>
-      </el-timeline-item>
-      <el-timeline-item timestamp="2018/4/3" placement="top">
-        <el-card>
-          <h4>Update Github template</h4>
-          <p>Tom committed 2018/4/3 20:46</p>
-        </el-card>
-      </el-timeline-item>
-      <el-timeline-item timestamp="2018/4/2" placement="top">
-        <el-card>
-          <h4>Update Github template</h4>
-          <p>Tom committed 2018/4/2 20:46</p>
-        </el-card>
-      </el-timeline-item>
-    </el-timeline>
+  <default padding-top="0" padding-left="0" padding-right="0">
+    <config-bar />
+    <div class="content-wrapper">
+      <el-timeline>
+        <el-timeline-item timestamp="2018/4/12" placement="top">
+          <el-card>
+            <h4>{{ config.name }} 2018/4/3 20:46</h4>
+          </el-card>
+        </el-timeline-item>
+        <el-timeline-item timestamp="2018/4/3" placement="top">
+          <el-card>
+            <h4>Fetched 2018/4/3 20:46</h4>
+            <p></p>
+          </el-card>
+        </el-timeline-item>
+      </el-timeline>
+    </div>
   </default>
 </template>
 
 <script>
 import Default from "@/layouts/Default";
+import ConfigBar from "@/components/ConfigBar/ConfigBar";
 
 export default {
-  components: { Default },
+  components: { Default, ConfigBar },
   data() {
     return {
       config: {},
@@ -48,3 +45,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.content-wrapper {
+  padding: 20px;
+}
+</style>
