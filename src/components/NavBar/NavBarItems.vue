@@ -16,6 +16,7 @@
           @contextmenu.prevent="openMenuItemContext(element)"
           :to="{ name: 'Config', params: { id: element.id } }"
           :label="element.name"
+          :url="element.url"
           :icon="reorder ? 'el-icon-d-caret' : 'el-icon-menu'"
         />
       </div>

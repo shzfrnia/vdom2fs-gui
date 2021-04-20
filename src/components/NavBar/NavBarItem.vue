@@ -2,7 +2,10 @@
   <router-link :to="to">
     <el-menu-item>
       <i :class="icon" />
-      <span>{{ label }}</span>
+      <span class="item-label">
+        {{ label }}
+        <span class="url-label">{{ url }}</span>
+      </span>
     </el-menu-item>
   </router-link>
 </template>
@@ -22,6 +25,10 @@ export default {
       type: String,
       required: true,
     },
+    url: {
+      type: String,
+      required: true,
+    },
   },
 };
 </script>
@@ -34,11 +41,12 @@ a {
   display: block;
 }
 
-a li:focus,a li:hover {
+a li:focus,
+a li:hover {
   background: unset;
 }
 
-.router-link-active span,
+.router-link-active .item-label,
 .router-link-active i {
   color: #409eff !important;
 }
@@ -52,5 +60,17 @@ a,
 .el-menu-item,
 .el-menu-item.is-active {
   color: #333;
+}
+
+.item-label {
+  position: relative;
+}
+
+.url-label {
+  color: gray !important;
+  top: -6px;
+  left: 0;
+  font-size: 10px;
+  position: absolute;
 }
 </style>
