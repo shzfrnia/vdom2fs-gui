@@ -13,7 +13,7 @@
       <el-container class="body">
         <slot name="aside" />
         <el-container>
-          <el-main>
+          <el-main :style="{...paddings}">
             <slot />
           </el-main>
         </el-container>
@@ -32,6 +32,38 @@ import { ipcRenderer } from "electron";
 
 export default {
   components: { Loader, ConfigDialog },
+  props: {
+    paddingTop: {
+      type: String,
+      default: "20",
+      required: true,
+    },
+    paddingLeft: {
+      type: String,
+      default: "20",
+      required: true,
+    },
+    paddingRight: {
+      type: String,
+      default: "20",
+      required: true,
+    },
+    paddingBottom: {
+      type: String,
+      default: "20",
+      required: true,
+    },
+  },
+  computed: {
+    paddings() {
+      return {
+        "padding-top": this.paddingTop,
+        "padding-bottom": this.paddingBottom,
+        "padding-left": this.paddingLeft,
+        "padding-right": this.paddingRight
+      };
+    },
+  },
   data() {
     return {
       configDialog: {
