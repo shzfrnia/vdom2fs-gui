@@ -34,6 +34,6 @@ export default {
 
 <style scoped>
 .buttons-wrapper > * {
-  margin: 0 5px;
+  margin: 0 2px;
 }
 </style>

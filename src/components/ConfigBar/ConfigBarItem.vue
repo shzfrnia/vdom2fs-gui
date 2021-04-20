@@ -1,5 +1,5 @@
 <template>
-  <el-button class="button" plain type="text">
+  <el-button @focus="$event.target.blur()" class="button" plain type="text">
     <div class="label">{{ label }}</div>
     <i :class="[icon]" class="icon" />
   </el-button>
@@ -26,18 +26,24 @@ export default {
   font-size: 12px;
   margin-bottom: 3px;
 }
+
 .icon {
   color: #303133;
   font-size: 24px;
 }
+
 .button {
   width: 55px;
   padding: 5px;
 }
-.button:hover,
-.button:focus {
+
+.button:hover {
   color: #303133;
   background: #e9eef3;
   border: 1px solid #e9eef3;
+}
+
+.button:active {
+  transform: scale(.9);
 }
 </style>
