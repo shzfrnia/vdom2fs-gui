@@ -1,11 +1,11 @@
 <template>
   <router-link :to="to">
     <el-menu-item>
-      <i :class="icon" />
-      <span class="item-label">
-        {{ label }}
-        <span class="url-label">{{ url }}</span>
-      </span>
+      <div class="wrapper">
+        <i :class="icon" class="icon" />
+        <p class="item-label">{{ label }}</p>
+        <p class="url-label">{{ url }}</p>
+      </div>
     </el-menu-item>
   </router-link>
 </template>
@@ -55,6 +55,16 @@ a li:hover {
   cursor: grab;
 }
 
+.el-menu-item {
+  display: inline-flex;
+  padding-top: 15px;
+  line-height: initial;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 100%;
+}
+
 a,
 .el-menu-item i,
 .el-menu-item,
@@ -62,15 +72,29 @@ a,
   color: #333;
 }
 
+.icon {
+  float: left;
+  flex-shrink: 0;
+  grid-area: icon;
+}
+
 .item-label {
-  position: relative;
+  grid-area: label;
+  height: 0;
+}
+
+.wrapper {
+  display: grid;
+  grid-template-areas: "icon label"  
+                       "icon url";
 }
 
 .url-label {
+  grid-area: url;
   color: gray !important;
-  top: -6px;
-  left: 0;
   font-size: 10px;
-  position: absolute;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 </style>
