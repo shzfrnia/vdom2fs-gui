@@ -22,21 +22,19 @@ export default (isMac, win) => [
   {
     label: "File",
     submenu: [
-      ...(isMac
-        ? [
-            {
-              label: "New config",
-              accelerator: isMac ? "cmd+N" : "ctrl+N",
-              click: async () => {
-                win.webContents.send("open-config-dialog", {
-                  config: {},
-                  create: true,
-                });
-              },
-            },
-            { role: "close" },
-          ]
-        : [{ role: "quit" }]),
+      ...[
+        {
+          label: "New config",
+          accelerator: isMac ? "cmd+N" : "ctrl+N",
+          click: async () => {
+            win.webContents.send("open-config-dialog", {
+              config: {},
+              create: true,
+            });
+          },
+        },
+      ],
+      ...(isMac ? [{ role: "close" }] : [{ role: "quit" }]),
     ],
   },
   // { role: 'editMenu' }
