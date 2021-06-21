@@ -1,6 +1,7 @@
 import { FileManager } from "@/api/index";
 import { remote } from "electron";
-const { net } = remote;
+import router from './../../router/index';
+const { net, dialog } = remote;
 
 const vdom2fs_path = "vdom2fs_path";
 const vdom2fs_path_is_valid = "vdom2fs_path_is_valid";
@@ -74,6 +75,24 @@ const actions = {
       });
       request.end();
     });
+  },
+  async chooseFolder({ dispatch, getters }) {
+    dialog
+      .showOpenDialog({ properties: ["openDirectory"] })
+      .then(async (result) => {
+        if (!result.canceled) {
+          await dispatch("checkVdom2fsFolderOnValid", result.filePaths[0]);
+          console.log(1)
+          if (getters.pathIsValid) {
+            router.push({ name: "Home" });
+          } else {
+            router.push({ name: "Setup" });
+          }
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   },
 };
 
