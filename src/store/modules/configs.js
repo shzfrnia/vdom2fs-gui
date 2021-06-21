@@ -67,6 +67,10 @@ const actions = {
   async updateConfig({ commit }, newConfig) {
     commit(newConfig.id < 0 ? "addConfig" : "updateConfig", newConfig);
   },
+  async getConfigById({ getters }, id) {
+    const config = getters.configs.filter((e) => e.id === parseInt(id));
+    return config ? { ...config[0] } : null;
+  },
 };
 
 export default {
