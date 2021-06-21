@@ -2,19 +2,7 @@
   <default padding-top="0" padding-left="0" padding-right="0">
     <config-bar />
     <div class="content-wrapper">
-      <el-timeline>
-        <el-timeline-item timestamp="2018/4/12" placement="top">
-          <el-card>
-            <h4>{{ config.name }} 2018/4/3 20:46</h4>
-          </el-card>
-        </el-timeline-item>
-        <el-timeline-item timestamp="2018/4/3" placement="top">
-          <el-card>
-            <h4>Fetched 2018/4/3 20:46</h4>
-            <p></p>
-          </el-card>
-        </el-timeline-item>
-      </el-timeline>
+      <timeline-items />
     </div>
   </default>
 </template>
@@ -22,9 +10,10 @@
 <script>
 import Default from "@/layouts/Default";
 import ConfigBar from "@/components/ConfigBar/ConfigBar";
+import TimelineItems from "@/components/Timeline/TimelineItems";
 
 export default {
-  components: { Default, ConfigBar },
+  components: { Default, ConfigBar, TimelineItems },
   data() {
     return {
       config: {},
