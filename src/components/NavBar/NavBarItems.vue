@@ -26,7 +26,7 @@
 <script>
 import NavBarItem from "./NavBarItem";
 import draggable from "vuedraggable";
-import menuItemContextSetup from "@/api/context-menu/menu-item-context/menu-item-context-setup";
+import menuItemContextSetup from "@/api/context-menu/menu-item-context/menu-setup";
 
 export default {
   setup() {
