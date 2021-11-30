@@ -1,6 +1,6 @@
 
 <template>
-  <el-row>
+  <el-row @contextmenu.prevent="openMenuContext">
     <el-col :span="24">
       <el-menu class="el-menu-vertical-demo">
         <nav-bar-items v-model="configs" :show-favorites="true" />
@@ -14,8 +14,12 @@
 <script>
 import { mapGetters, mapMutations } from "vuex";
 import NavBarItems from "./NavBarItems";
+import menuContextSetup from "@/api/context-menu/menu-context/menu-setup";
 
 export default {
+  setup() {
+    return { ...menuContextSetup() }
+  },
   components: { NavBarItems },
   methods: {
     ...mapMutations("configs", ["updateConfigs"]),
