@@ -28,6 +28,7 @@ export default {
 
 <style scoped>
 .el-footer {
+  padding: 0;
   display: flex;
   flex-direction: row;
   justify-content: flex-end;

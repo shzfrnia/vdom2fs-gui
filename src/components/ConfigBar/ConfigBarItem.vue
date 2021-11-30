@@ -24,17 +24,18 @@ export default {
 .label {
   color: #3a3b3d;
   font-size: 12px;
-  margin-bottom: 3px;
+  margin-bottom: 5px;
 }
 
 .icon {
   color: #303133;
-  font-size: 24px;
+  font-size: 20px;
 }
 
 .button {
   width: 55px;
   padding: 5px;
+  border-radius: 0;
 }
 
 .button:hover {
@@ -43,7 +44,7 @@ export default {
   border: 1px solid #e9eef3;
 }
 
-.button:active {
+/* .button:active {
   transform: scale(.9);
-}
+} */
 </style>
