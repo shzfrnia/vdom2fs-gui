@@ -1,14 +1,20 @@
 import { FileManager } from "@/api/index";
 import { remote } from "electron";
-import router from './../../router/index';
+import router from "./../../router/index";
 const { net, dialog } = remote;
 
-const vdom2fs_path = "vdom2fs_path";
-const vdom2fs_path_is_valid = "vdom2fs_path_is_valid";
+const localStorageKeys = {
+  vdom2fsPath: "vdom2fs_path",
+  vdom2fsPathIsValid: "vdom2fs_path_is_valid",
+};
+
+const connectionErrors = {
+  "net::ERR_INTERNET_DISCONNECTED": "Please, check internet connection.",
+};
 
 const state = () => ({
-  pathToScripts: localStorage.getItem(vdom2fs_path) || "",
-  pathIsValid: localStorage.getItem(vdom2fs_path_is_valid) || false,
+  pathToScripts: localStorage.getItem(localStorageKeys.vdom2fsPath) || "",
+  pathIsValid: localStorage.getItem(localStorageKeys.vdom2fsPathIsValid) || false,
   pathErrors: [],
   scripts: {
     exporter: "exporter.py",
@@ -19,15 +25,18 @@ const state = () => ({
 const mutations = {
   setPath(state, path) {
     state.pathToScripts = path;
-    localStorage.setItem(vdom2fs_path, state.pathToScripts);
+    localStorage.setItem(localStorageKeys.vdom2fsPath, state.pathToScripts);
   },
   clearPath(state) {
     state.pathToScripts = "";
-    localStorage.setItem(vdom2fs_path, "");
+    localStorage.setItem(localStorageKeys.vdom2fsPath, "");
   },
   setPathValidState(state, _state) {
     state.pathIsValid = _state;
-    localStorage.setItem(vdom2fs_path_is_valid, state.pathIsValid);
+    localStorage.setItem(
+      localStorageKeys.vdom2fsPathIsValid,
+      state.pathIsValid
+    );
   },
   setPathErrors(state, errors) {
     state.pathErrors = errors;
@@ -71,7 +80,7 @@ const actions = {
         resolve(response.statusCode == 200);
       });
       request.on("error", (error) => {
-        reject(error);
+        reject(connectionErrors[error.message] || error.message);
       });
       request.end();
     });
@@ -82,7 +91,6 @@ const actions = {
       .then(async (result) => {
         if (!result.canceled) {
           await dispatch("checkVdom2fsFolderOnValid", result.filePaths[0]);
-          console.log(1)
           if (getters.pathIsValid) {
             router.push({ name: "Home" });
           } else {
