@@ -13,7 +13,7 @@
       <el-container class="body">
         <slot name="aside" />
         <el-container>
-          <el-main :style="{...paddings}">
+          <el-main :style="{ ...paddings }">
             <slot />
           </el-main>
         </el-container>
@@ -29,41 +29,11 @@
 import Loader from "@/components/Loader";
 import ConfigDialog from "@/components/dialogs/ConfigDialog/ConfigDialog";
 import { ipcRenderer } from "electron";
+import paddingsMixin from "@/components/utils/paddings-mixin";
 
 export default {
+  mixins: [paddingsMixin],
   components: { Loader, ConfigDialog },
-  props: {
-    paddingTop: {
-      type: String,
-      default: "20",
-      required: true,
-    },
-    paddingLeft: {
-      type: String,
-      default: "20",
-      required: true,
-    },
-    paddingRight: {
-      type: String,
-      default: "20",
-      required: true,
-    },
-    paddingBottom: {
-      type: String,
-      default: "20",
-      required: true,
-    },
-  },
-  computed: {
-    paddings() {
-      return {
-        "padding-top": this.paddingTop,
-        "padding-bottom": this.paddingBottom,
-        "padding-left": this.paddingLeft,
-        "padding-right": this.paddingRight
-      };
-    },
-  },
   data() {
     return {
       configDialog: {
@@ -105,5 +75,10 @@ export default {
   flex-grow: 1;
   overflow: auto;
   background-color: #e9eef3;
+}
+
+.el-main {
+  display: flex;
+  flex-direction: column;
 }
 </style>

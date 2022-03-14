@@ -1,18 +1,18 @@
 <template>
-  <default padding-top="0" padding-left="0" padding-right="0">
-    <config-bar /> {{ config }}
+  <default-layout padding-top="0" padding-left="0" padding-right="0" padding-bottom="0">
+    <config-bar />
     <div class="content-wrapper"><timeline-items /></div>
-  </default>
+  </default-layout>
 </template>
 
 <script>
 import { mapActions } from "vuex";
-import Default from "@/layouts/Default";
+import { default as DefaultLayout } from "@/layouts/Default";
 import ConfigBar from "@/components/ConfigBar/ConfigBar";
 import TimelineItems from "@/components/Timeline/TimelineItems";
 
 export default {
-  components: { Default, ConfigBar, TimelineItems },
+  components: { DefaultLayout, ConfigBar, TimelineItems },
   data() {
     return {
       config: {},
@@ -36,5 +36,7 @@ export default {
 <style scoped>
 .content-wrapper {
   padding: 20px;
+  overflow: auto;
+  flex: 1;
 }
 </style>

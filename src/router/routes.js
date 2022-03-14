@@ -25,7 +25,7 @@ export default [
   {
     path: "/setup",
     name: "Setup",
-    component: () => import("@/views/SetUp.vue"),
+    component: () => import("@/views/Setup.vue"),
     beforeEnter: redirecrIfVdom2fsIsCorrect,
   },
 ];

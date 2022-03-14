@@ -1,5 +1,5 @@
 <template>
-  <default>
+  <default-layout>
     <div class="wrapper">
       <uploader accept=".txt" tip="Upload application config file or input" />
       <el-button
@@ -9,16 +9,16 @@
         circle
       />
     </div>
-  </default>
+  </default-layout>
 </template>
 
 <script>
-import Default from "@/layouts/Default";
+import { default as DefaultLayout } from "@/layouts/Default";
 import Uploader from "@/components/inputs/Uploader";
 import { ipcRenderer } from "electron";
 
 export default {
-  components: { Default, Uploader },
+  components: { DefaultLayout, Uploader },
   name: "Home",
   methods: {
     openCreateConfigDialog() {

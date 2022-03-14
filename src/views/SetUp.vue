@@ -1,20 +1,20 @@
 <template>
-  <header-and-footer>
+  <header-and-footer-layout>
     <el-empty description="Укажите путь до vdom2fs">
       <el-button @click="chooseFolder" type="primary">
         Настроить папку
       </el-button>
     </el-empty>
-  </header-and-footer>
+  </header-and-footer-layout>
 </template>
 
 <script>
-import HeaderAndFooter from "@/layouts/HeaderAndFooter";
+import {default as HeaderAndFooterLayout} from "@/layouts/HeaderAndFooter";
 import { mapActions, mapGetters } from "vuex";
 
 export default {
   components: {
-    HeaderAndFooter,
+    HeaderAndFooterLayout,
   },
   computed: {
     ...mapGetters("vdom2fs", ["pathErrors"]),
