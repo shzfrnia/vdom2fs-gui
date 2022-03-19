@@ -1,8 +1,11 @@
 <template>
   <router-link :to="to">
     <el-menu-item>
-      <i :class="icon" />
-      <span>{{ label }}</span>
+      <div class="wrapper">
+        <i :class="icon" class="icon" />
+        <p class="item-label">{{ label }}</p>
+        <p class="url-label">{{ url }}</p>
+      </div>
     </el-menu-item>
   </router-link>
 </template>
@@ -22,6 +25,10 @@ export default {
       type: String,
       required: true,
     },
+    url: {
+      type: String,
+      required: true,
+    },
   },
 };
 </script>
@@ -34,11 +41,12 @@ a {
   display: block;
 }
 
-a li:focus,a li:hover {
+a li:focus,
+a li:hover {
   background: unset;
 }
 
-.router-link-active span,
+.router-link-active .item-label,
 .router-link-active i {
   color: #409eff !important;
 }
@@ -47,10 +55,46 @@ a li:focus,a li:hover {
   cursor: grab;
 }
 
+.el-menu-item {
+  display: inline-flex;
+  padding-top: 15px;
+  line-height: initial;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 100%;
+}
+
 a,
 .el-menu-item i,
 .el-menu-item,
 .el-menu-item.is-active {
   color: #333;
+}
+
+.icon {
+  float: left;
+  flex-shrink: 0;
+  grid-area: icon;
+}
+
+.item-label {
+  grid-area: label;
+  height: 0;
+}
+
+.wrapper {
+  display: grid;
+  grid-template-areas: "icon label"  
+                       "icon url";
+}
+
+.url-label {
+  grid-area: url;
+  color: gray !important;
+  font-size: 10px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 </style>
