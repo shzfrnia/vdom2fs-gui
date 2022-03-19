@@ -13,7 +13,7 @@
         <nav-bar-item
           class="menu-item"
           :class="{ hide: showFavorites ^ (element.favorite == true) }"
-          @contextmenu.prevent="openMenuItemContext(element)"
+          @contextmenu.prevent.stop="openMenuItemContext(element)"
           :to="{ name: 'Config', params: { id: element.id } }"
           :label="element.name"
           :url="element.url"
