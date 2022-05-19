@@ -1,5 +1,16 @@
 import router from "@/router/index";
 
+// config 
+// {
+//   id: -1,
+//   name: "",
+//   appId: "",
+//   url: "",
+//   user: "",
+//   passMd5: "",
+//   favorite: true,
+// }
+
 const localStorageKey = "configs";
 
 const updateLocalSotrage = (configs) => {

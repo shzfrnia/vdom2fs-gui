@@ -1,3 +1,4 @@
+import { cwd } from "process";
 import { FileManager } from "@/api/index";
 import { Python } from "@/api/index";
 import router from "@/router/index";
@@ -83,12 +84,14 @@ const actions = {
     dispatch("setPath", { _path, errors });
     commit("setLoading", false, { root: true });
   },
+
   async setPath({ commit }, payload) {
     const { _path, errors } = payload;
     commit("setPathValidState", errors.length == 0);
     commit("setPathErrors", errors);
     commit("setPath", _path);
   },
+
   async checkApplicationUrl(context, url) {
     return new Promise((resolve, reject) => {
       const request = net.request(`https://${url}`);
@@ -101,6 +104,7 @@ const actions = {
       request.end();
     });
   },
+
   async chooseFolder({ dispatch, getters }) {
     dialog
       .showOpenDialog({ properties: ["openDirectory"] })
@@ -118,6 +122,7 @@ const actions = {
         console.error(err);
       });
   },
+
   async checkScripts({ getters }, _path) {
     const errors = [];
     try {
@@ -147,15 +152,27 @@ const actions = {
       throw errors;
     }
   },
-  async __exportApplication({getters}, config) {
-    console.log(config);
+
+  async __exportApplication({ getters }, config) {
+    const info = await FileManager.createTempFileConfig(config);
     await Python.execute(getters.scriptsFullPath.exporter, {
-      args: ["-c", path.join(getters.currentPath, "test.txt")],
+      args: ["-c", info.path],
     });
+    FileManager.cleanupTempFiles();
   },
-  async exportApplication({commit, dispatch}, config) {
+
+  async exportApplication({ commit, dispatch, getters }, config) {
     commit("setLoading", true, { root: true });
     await dispatch("__exportApplication", config);
+    await FileManager.moveFile(
+      path.join(cwd(), "exported_app.xml"),
+      path.join(
+        getters.currentPath,
+        "exported_apps",
+        config.url,
+        `${new Date().toString()}.xml`
+      )
+    );
     commit("setLoading", false, { root: true });
   },
 };
