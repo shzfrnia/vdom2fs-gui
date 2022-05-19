@@ -1,43 +1,45 @@
 <template>
-  <default>
-    <el-timeline>
-      <el-timeline-item timestamp="2018/4/12" placement="top">
-        <el-card>
-          <h4>{{ config.name }}</h4>
-          <p>Tom committed 2018/4/12 20:46</p>
-        </el-card>
-      </el-timeline-item>
-      <el-timeline-item timestamp="2018/4/3" placement="top">
-        <el-card>
-          <h4>Update Github template</h4>
-          <p>Tom committed 2018/4/3 20:46</p>
-        </el-card>
-      </el-timeline-item>
-      <el-timeline-item timestamp="2018/4/2" placement="top">
-        <el-card>
-          <h4>Update Github template</h4>
-          <p>Tom committed 2018/4/2 20:46</p>
-        </el-card>
-      </el-timeline-item>
-    </el-timeline>
-  </default>
+  <default-layout
+    padding-top="0"
+    padding-left="0"
+    padding-right="0"
+    padding-bottom="0"
+  >
+    <config-bar @export-click="exportHandler" />
+    <div class="content-wrapper"><timeline-items :files="files" /></div>
+  </default-layout>
 </template>
 
 <script>
-import Default from "@/layouts/Default";
+import { mapActions } from "vuex";
+import { default as DefaultLayout } from "@/layouts/Default";
+import ConfigBar from "@/components/ConfigBar/ConfigBar";
+import TimelineItems from "@/components/Timeline/TimelineItems";
 
 export default {
-  components: { Default },
+  components: { DefaultLayout, ConfigBar, TimelineItems },
   data() {
     return {
       config: {},
+      files: [],
     };
   },
   methods: {
+    ...mapActions("configs", ["getConfigById"]),
+    ...mapActions("vdom2fs", [
+      "exportApplication",
+      "getConfigExportedAppsFiles",
+    ]),
     async setupConfig() {
-      this.config = this.$store.state.global.configs.configs.filter(
-        (e) => e.id == this.$route.params.id
-      )[0];
+      this.config = await this.getConfigById(this.$route.params.id);
+      this.updateFiles();
+    },
+    async updateFiles() {
+      this.files = await this.getConfigExportedAppsFiles(this.config);
+    },
+    async exportHandler() {
+      await this.exportApplication(this.config);
+      this.updateFiles();
     },
   },
   async beforeUpdate() {
@@ -48,3 +50,11 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.content-wrapper {
+  padding: 20px;
+  overflow: auto;
+  flex: 1;
+}
+</style>

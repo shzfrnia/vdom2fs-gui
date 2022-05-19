@@ -1,5 +1,16 @@
 import router from "@/router/index";
 
+// config 
+// {
+//   id: -1,
+//   name: "",
+//   appId: "",
+//   url: "",
+//   user: "",
+//   passMd5: "",
+//   favorite: true,
+// }
+
 const localStorageKey = "configs";
 
 const updateLocalSotrage = (configs) => {
@@ -66,6 +77,10 @@ const actions = {
   },
   async updateConfig({ commit }, newConfig) {
     commit(newConfig.id < 0 ? "addConfig" : "updateConfig", newConfig);
+  },
+  async getConfigById({ getters }, id) {
+    const config = getters.configs.filter((e) => e.id === parseInt(id));
+    return config ? { ...config[0] } : null;
   },
 };
 

@@ -1,12 +1,13 @@
 <template>
-  <default>About</default>
+  <default-layout>About</default-layout>
 </template>
+
 <script>
-import Default from "../layouts/Default";
+import { default as DefaultLayout } from "@/layouts/Default";
 
 export default {
   components: {
-    Default,
+    DefaultLayout,
   },
 };
 </script>

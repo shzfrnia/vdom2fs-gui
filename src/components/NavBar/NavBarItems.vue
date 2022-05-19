@@ -13,7 +13,7 @@
         <nav-bar-item
           class="menu-item"
           :class="{ hide: showFavorites ^ (element.favorite == true) }"
-          @contextmenu.prevent="openMenuItemContext(element)"
+          @contextmenu.prevent.stop="openMenuItemContext(element)"
           :to="{ name: 'Config', params: { id: element.id } }"
           :label="element.name"
           :url="element.url"
@@ -27,7 +27,7 @@
 <script>
 import NavBarItem from "./NavBarItem";
 import draggable from "vuedraggable";
-import menuItemContextSetup from "@/api/context-menu/menu-item-context/menu-item-context-setup";
+import menuItemContextSetup from "@/api/context-menu/menu-item-context/menu-setup";
 
 export default {
   setup() {

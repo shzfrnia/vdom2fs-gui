@@ -1,33 +1,42 @@
 
 <template>
-  <base-layout>
-    <template #header>
-      <custom-header />
-    </template>
+  <base-layout
+    :padding-top="paddingTop"
+    :padding-left="paddingLeft"
+    :padding-right="paddingRight"
+    :padding-bottom="paddingBottom"
+  >
+    <template #header><app-header /></template>
     <template #aside>
-      <el-aside style="width: 200px">
-        <nav-bar />
-      </el-aside>
+      <el-aside><nav-bar /></el-aside>
     </template>
+
     <slot />
-    <template #footer>
-      <custom-footer />
-    </template>
+
+    <template #footer><app-footer /></template>
   </base-layout>
 </template>
 
 <script>
 import BaseLayout from "@/layouts/Base";
 import NavBar from "@/components/NavBar/NavBar";
-import Footer from "@/components/Footer";
-import Header from "@/components/Header";
+import { default as AppFooter } from "@/components/Footer";
+import { default as AppHeader } from "@/components/Header";
+import paddingsMixin from "@/components/utils/paddings-mixin";
 
 export default {
+  mixins: [paddingsMixin],
   components: {
     NavBar,
-    CustomHeader: Header,
+    AppHeader,
     BaseLayout,
-    CustomFooter: Footer,
+    AppFooter,
   },
 };
 </script>
+
+<style scoped>
+.el-aside {
+  width: 200px !important;
+}
+</style>

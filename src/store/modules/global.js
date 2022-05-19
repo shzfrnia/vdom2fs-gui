@@ -21,7 +21,13 @@ const getters = {
   },
 };
 
-const actions = {};
+const actions = {
+  async runWithLoader({commit}, func) {
+    commit("setLoading", true);
+    await func.call();
+    commit("setLoading", false);
+  }
+};
 
 export default {
   modules: { notification, configs },

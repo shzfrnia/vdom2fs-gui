@@ -1,33 +1,48 @@
+import { cwd } from "process";
 import { FileManager } from "@/api/index";
+import { Python } from "@/api/index";
+import router from "@/router/index";
 import { remote } from "electron";
-const { net } = remote;
+import path from "path";
+const { net, dialog } = remote;
 
-const vdom2fs_path = "vdom2fs_path";
-const vdom2fs_path_is_valid = "vdom2fs_path_is_valid";
+const localStorageKeys = {
+  vdom2fsPath: "vdom2fs_path",
+  vdom2fsPathIsValid: "vdom2fs_path_is_valid",
+};
+
+const exportedAppsFolder = "exported_apps";
+
+const connectionErrors = {
+  "net::ERR_INTERNET_DISCONNECTED": "Please, check internet connection.",
+};
 
 const state = () => ({
-  pathToScripts: localStorage.getItem(vdom2fs_path) || "",
-  pathIsValid: localStorage.getItem(vdom2fs_path_is_valid) || false,
+  pathToScripts: localStorage.getItem(localStorageKeys.vdom2fsPath) || "",
+  pathIsValid:
+    localStorage.getItem(localStorageKeys.vdom2fsPathIsValid) || false,
   pathErrors: [],
-  scripts: {
-    exporter: "exporter.py",
-    parse: "parse.py",
-  },
 });
 
 const mutations = {
-  setPath(state, path) {
-    state.pathToScripts = path;
-    localStorage.setItem(vdom2fs_path, state.pathToScripts);
+  setPath(state, _path) {
+    state.pathToScripts = _path;
+    localStorage.setItem(localStorageKeys.vdom2fsPath, state.pathToScripts);
   },
+
   clearPath(state) {
     state.pathToScripts = "";
-    localStorage.setItem(vdom2fs_path, "");
+    localStorage.setItem(localStorageKeys.vdom2fsPath, "");
   },
+
   setPathValidState(state, _state) {
     state.pathIsValid = _state;
-    localStorage.setItem(vdom2fs_path_is_valid, state.pathIsValid);
+    localStorage.setItem(
+      localStorageKeys.vdom2fsPathIsValid,
+      state.pathIsValid
+    );
   },
+
   setPathErrors(state, errors) {
     state.pathErrors = errors;
   },
@@ -37,32 +52,60 @@ const getters = {
   pathIsSetted(state) {
     return state.pathToScripts !== "";
   },
+
   currentPath(state) {
     return state.pathToScripts;
   },
+
   pathIsValid(state) {
     return state.pathIsValid === "true" || state.pathIsValid === true;
   },
+
   pathErrors(state) {
     return state.pathErrors;
+  },
+
+  scripts() {
+    return {
+      exporter: "exporter.py",
+      parse: "parse.py",
+    };
+  },
+
+  scriptsFullPath(state, getters) {
+    const result = {};
+    for (const [key, value] of Object.entries(getters.scripts)) {
+      result[key] = path.join(getters.currentPath, value);
+    }
+    return result;
+  },
+
+  getConfigExportedAppsFolderPath: (state, getters) => (config) => {
+    return path.join(getters.currentPath, exportedAppsFolder, config.url);
   },
 };
 
 const actions = {
-  async checkVdom2fsFolderOnValid({ commit, state }, path) {
+  async checkVdom2fsFolderOnValid({ commit, getters, dispatch }, _path) {
     commit("setLoading", true, { root: true });
-    const {
-      pathIsValid,
-      errors,
-    } = await FileManager.checkFolderOnValidVdom2fsScripts(path, {
-      exporter: state.scripts.exporter,
-      parse: state.scripts.parse,
-    });
-    commit("setPathValidState", pathIsValid);
-    commit("setPathErrors", errors);
-    commit("setPath", path);
+    let errors = [];
+    try {
+      await FileManager.filesExists(_path, { ...getters.scripts });
+      await dispatch("checkScripts", _path);
+    } catch (error) {
+      errors = error;
+    }
+    dispatch("setPath", { _path, errors });
     commit("setLoading", false, { root: true });
   },
+
+  async setPath({ commit }, payload) {
+    const { _path, errors } = payload;
+    commit("setPathValidState", errors.length == 0);
+    commit("setPathErrors", errors);
+    commit("setPath", _path);
+  },
+
   async checkApplicationUrl(context, url) {
     return new Promise((resolve, reject) => {
       const request = net.request(`https://${url}`);
@@ -70,10 +113,94 @@ const actions = {
         resolve(response.statusCode == 200);
       });
       request.on("error", (error) => {
-        reject(error);
+        reject(connectionErrors[error.message] || error.message);
       });
       request.end();
     });
+  },
+
+  async chooseFolder({ dispatch, getters }) {
+    dialog
+      .showOpenDialog({ properties: ["openDirectory"] })
+      .then(async (result) => {
+        if (!result.canceled) {
+          await dispatch("checkVdom2fsFolderOnValid", result.filePaths[0]);
+          if (getters.pathIsValid) {
+            router.push({ name: "Home" });
+          } else {
+            router.push({ name: "Setup" });
+          }
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  },
+
+  async checkScripts({ getters }, _path) {
+    const errors = [];
+    try {
+      await Python.execute(path.join(_path, getters.scripts.exporter), {
+        args: ["-h"],
+      });
+    } catch (error) {
+      const errorMessage = error.toString();
+      if (!errorMessage.includes("conf_file is required")) {
+        errors.push({
+          file: getters.scripts.exporter,
+          message: errorMessage.slice(0),
+        });
+      }
+    }
+    try {
+      await Python.execute(path.join(_path, getters.scripts.parse), {
+        args: ["-h"],
+      });
+    } catch (error) {
+      errors.push({
+        file: getters.scripts.parse,
+        message: error.toString().slice(0),
+      });
+    }
+    if (errors.length > 0) {
+      throw errors;
+    }
+  },
+
+  async __exportApplication({ getters }, config) {
+    const info = await FileManager.createTempFile(
+      [
+        `url = "https://${config.url}"`,
+        `user = "${config.user}"`,
+        `pass_md5 = '${config.passMd5}'`,
+        `app_id = "${config.appId}"`,
+      ].join(`\n`)
+    );
+    await Python.execute(getters.scriptsFullPath.exporter, {
+      args: ["-c", info.path],
+    });
+    FileManager.cleanupTempFiles();
+  },
+
+  async exportApplication({ commit, dispatch, getters }, config) {
+    commit("setLoading", true, { root: true });
+    await dispatch("__exportApplication", config);
+    await FileManager.moveFile(
+      path.join(cwd(), "exported_app.xml"),
+      path.join(
+        getters.currentPath,
+        exportedAppsFolder,
+        config.url,
+        `${new Date().toString()}.xml`
+      )
+    );
+    commit("setLoading", false, { root: true });
+  },
+
+  async getConfigExportedAppsFiles({ getters }, config) {
+    return await FileManager.getFilesByPath(
+      getters.getConfigExportedAppsFolderPath(config)
+    );
   },
 };
 

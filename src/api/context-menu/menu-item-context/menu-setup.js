@@ -1,15 +1,15 @@
 import { remote } from "electron";
 import { ref } from "vue";
-import menuItemContextMenuTemplate from "./menu-item-context-template";
 const { Menu } = remote;
 import store from "@/store/index";
 import { ipcRenderer } from "electron";
+import template from "./template";
 
 export default () => {
   const reorder = ref(false);
 
   const openMenuItemContext = (config) => {
-    const contextMenuTemplate = menuItemContextMenuTemplate(
+    const contextMenuTemplate = template(
       config,
       window,
       store,
