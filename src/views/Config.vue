@@ -1,6 +1,11 @@
 <template>
-  <default-layout padding-top="0" padding-left="0" padding-right="0" padding-bottom="0">
-    <config-bar />
+  <default-layout
+    padding-top="0"
+    padding-left="0"
+    padding-right="0"
+    padding-bottom="0"
+  >
+    <config-bar @export-click="exportHandler" />
     <div class="content-wrapper"><timeline-items /></div>
   </default-layout>
 </template>
@@ -20,8 +25,12 @@ export default {
   },
   methods: {
     ...mapActions("configs", ["getConfigById"]),
+    ...mapActions("vdom2fs", ["exportApplication"]),
     async setupConfig() {
       this.config = await this.getConfigById(this.$route.params.id);
+    },
+    async exportHandler() {
+      this.exportApplication(this.config);
     },
   },
   async beforeUpdate() {

@@ -2,10 +2,10 @@
   <div class="buttons-wrapper">
     <config-bar-item
       v-for="btn in buttons"
-      :key="btn.label"
+      :key="btn.id"
       :label="btn.label"
       :icon="btn.icon"
-      @click="btn.handler"
+      @click="callClickEmit(btn)"
     />
   </div>
 </template>
@@ -21,22 +21,23 @@ export default {
     return {
       buttons: [
         {
+          id: "export",
           label: "Export",
           icon: "el-icon-arrow-down",
-          handler: () => {
-            window.alert(1);
-          },
         },
         {
+          id: "parse",
           label: "Parse",
           icon: "el-icon-video-play",
-          handler: () => {
-            window.alert(2);
-          },
         },
       ],
     };
   },
+  methods: {
+    callClickEmit(btn) {
+      this.$emit(`${btn.id.toString().toLowerCase()}-click`);
+    }
+  }
 };
 </script>
 

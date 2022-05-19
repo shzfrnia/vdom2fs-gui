@@ -61,6 +61,13 @@ const getters = {
       parse: "parse.py",
     };
   },
+  scriptsFullPath(state, getters) {
+    const result = {};
+    for (const [key, value] of Object.entries(getters.scripts)) {
+      result[key] = path.join(getters.currentPath, value);
+    }
+    return result;
+  },
 };
 
 const actions = {
@@ -140,9 +147,17 @@ const actions = {
       throw errors;
     }
   },
-  // async exportApplication() {
-  //   Python.execute(state.scripts.exporter, 1)
-  // }
+  async __exportApplication({getters}, config) {
+    console.log(config);
+    await Python.execute(getters.scriptsFullPath.exporter, {
+      args: ["-c", path.join(getters.currentPath, "test.txt")],
+    });
+  },
+  async exportApplication({commit, dispatch}, config) {
+    commit("setLoading", true, { root: true });
+    await dispatch("__exportApplication", config);
+    commit("setLoading", false, { root: true });
+  },
 };
 
 export default {

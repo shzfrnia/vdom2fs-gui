@@ -1,7 +1,10 @@
 <template>
   <el-row>
     <el-col :span="24">
-        <config-bar-items />
+        <config-bar-items 
+          @export-click="$emit('export-click')"
+          @parse-click="$emit('parse-click')"
+        />
     </el-col>
   </el-row>
 </template>
@@ -11,6 +14,7 @@ import ConfigBarItems from "./ConfigBarItems";
 
 export default {
   components: { ConfigBarItems },
+  emits: ['export-click', 'parse-click']
 };
 </script>
 
