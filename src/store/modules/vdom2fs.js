@@ -11,6 +11,8 @@ const localStorageKeys = {
   vdom2fsPathIsValid: "vdom2fs_path_is_valid",
 };
 
+const exportedAppsFolder = "exported_apps";
+
 const connectionErrors = {
   "net::ERR_INTERNET_DISCONNECTED": "Please, check internet connection.",
 };
@@ -27,10 +29,12 @@ const mutations = {
     state.pathToScripts = _path;
     localStorage.setItem(localStorageKeys.vdom2fsPath, state.pathToScripts);
   },
+
   clearPath(state) {
     state.pathToScripts = "";
     localStorage.setItem(localStorageKeys.vdom2fsPath, "");
   },
+
   setPathValidState(state, _state) {
     state.pathIsValid = _state;
     localStorage.setItem(
@@ -38,6 +42,7 @@ const mutations = {
       state.pathIsValid
     );
   },
+
   setPathErrors(state, errors) {
     state.pathErrors = errors;
   },
@@ -47,27 +52,36 @@ const getters = {
   pathIsSetted(state) {
     return state.pathToScripts !== "";
   },
+
   currentPath(state) {
     return state.pathToScripts;
   },
+
   pathIsValid(state) {
     return state.pathIsValid === "true" || state.pathIsValid === true;
   },
+
   pathErrors(state) {
     return state.pathErrors;
   },
+
   scripts() {
     return {
       exporter: "exporter.py",
       parse: "parse.py",
     };
   },
+
   scriptsFullPath(state, getters) {
     const result = {};
     for (const [key, value] of Object.entries(getters.scripts)) {
       result[key] = path.join(getters.currentPath, value);
     }
     return result;
+  },
+
+  getConfigExportedAppsFolderPath: (state, getters) => (config) => {
+    return path.join(getters.currentPath, exportedAppsFolder, config.url);
   },
 };
 
@@ -154,7 +168,14 @@ const actions = {
   },
 
   async __exportApplication({ getters }, config) {
-    const info = await FileManager.createTempFileConfig(config);
+    const info = await FileManager.createTempFile(
+      [
+        `url = "https://${config.url}"`,
+        `user = "${config.user}"`,
+        `pass_md5 = '${config.passMd5}'`,
+        `app_id = "${config.appId}"`,
+      ].join(`\n`)
+    );
     await Python.execute(getters.scriptsFullPath.exporter, {
       args: ["-c", info.path],
     });
@@ -168,12 +189,18 @@ const actions = {
       path.join(cwd(), "exported_app.xml"),
       path.join(
         getters.currentPath,
-        "exported_apps",
+        exportedAppsFolder,
         config.url,
         `${new Date().toString()}.xml`
       )
     );
     commit("setLoading", false, { root: true });
+  },
+
+  async getConfigExportedAppsFiles({ getters }, config) {
+    return await FileManager.getFilesByPath(
+      getters.getConfigExportedAppsFolderPath(config)
+    );
   },
 };
 

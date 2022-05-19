@@ -6,7 +6,7 @@
     padding-bottom="0"
   >
     <config-bar @export-click="exportHandler" />
-    <div class="content-wrapper"><timeline-items /></div>
+    <div class="content-wrapper"><timeline-items :files="files" /></div>
   </default-layout>
 </template>
 
@@ -21,16 +21,25 @@ export default {
   data() {
     return {
       config: {},
+      files: [],
     };
   },
   methods: {
     ...mapActions("configs", ["getConfigById"]),
-    ...mapActions("vdom2fs", ["exportApplication"]),
+    ...mapActions("vdom2fs", [
+      "exportApplication",
+      "getConfigExportedAppsFiles",
+    ]),
     async setupConfig() {
       this.config = await this.getConfigById(this.$route.params.id);
+      this.updateFiles();
+    },
+    async updateFiles() {
+      this.files = await this.getConfigExportedAppsFiles(this.config);
     },
     async exportHandler() {
-      this.exportApplication(this.config);
+      await this.exportApplication(this.config);
+      this.updateFiles();
     },
   },
   async beforeUpdate() {

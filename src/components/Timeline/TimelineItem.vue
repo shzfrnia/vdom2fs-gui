@@ -1,13 +1,17 @@
 <template>
-  <el-timeline-item timestamp="2018/4/12" placement="top">
+  <el-timeline-item :timestamp="new Date(file.slice(0, -4)).toDateString()" placement="top">
     <el-card>
-      <h4>2018/4/3 20:46</h4>
+      <h4>{{file}}</h4>
     </el-card>
   </el-timeline-item>
 </template>
 
 <script>
-export default {};
+export default {
+  props: [
+    'file'
+  ]
+};
 </script>
 
 <style>

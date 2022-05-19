@@ -25,11 +25,11 @@ export default {
           label: "Export",
           icon: "el-icon-arrow-down",
         },
-        {
-          id: "parse",
-          label: "Parse",
-          icon: "el-icon-video-play",
-        },
+        // {
+        //   id: "parse",
+        //   label: "Parse",
+        //   icon: "el-icon-video-play",
+        // },
       ],
     };
   },

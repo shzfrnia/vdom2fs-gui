@@ -1,6 +1,6 @@
 <template>
   <el-timeline>
-    <timeline-item v-for="i in [1]" :key="i" />
+    <timeline-item v-for="i in files" :key="i" :file="i" />
   </el-timeline>
 </template>
 
@@ -9,6 +9,7 @@ import TimelineItem from "./TimelineItem";
 
 export default {
   components: { TimelineItem },
+  props: ['files']
 };
 </script>
 
