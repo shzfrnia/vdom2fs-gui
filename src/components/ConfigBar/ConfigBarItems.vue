@@ -5,12 +5,14 @@
       :key="btn.label"
       :label="btn.label"
       :icon="btn.icon"
+      @click="btn.handler"
     />
   </div>
 </template>
 
 <script>
 import ConfigBarItem from "./ConfigBarItem";
+
 export default {
   components: {
     ConfigBarItem,
@@ -20,15 +22,21 @@ export default {
       buttons: [
         {
           label: "Export",
-          icon: "el-icon-arrow-down"
+          icon: "el-icon-arrow-down",
+          handler: () => {
+            window.alert(1);
+          },
         },
         {
           label: "Parse",
-          icon: "el-icon-video-play"
+          icon: "el-icon-video-play",
+          handler: () => {
+            window.alert(2);
+          },
         },
-      ]
-    }
-  }
+      ],
+    };
+  },
 };
 </script>
 

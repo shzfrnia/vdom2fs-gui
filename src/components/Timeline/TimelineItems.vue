@@ -1,11 +1,6 @@
 <template>
   <el-timeline>
-    <timeline-item
-      v-for="i in [
-        1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-      ]"
-      :key="i"
-    />
+    <timeline-item v-for="i in [1]" :key="i" />
   </el-timeline>
 </template>
 
