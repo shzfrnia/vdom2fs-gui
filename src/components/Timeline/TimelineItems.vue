@@ -1,6 +1,13 @@
 <template>
   <el-timeline>
-    <timeline-item v-for="i in files" :key="i" :file="i" />
+    <timeline-item
+      v-for="i in files"
+      :key="i"
+      :file="i"
+      @click="itemClick(i)"
+      :color="i == activeFile ? '#409eff' : null"
+      :active="i == activeFile"
+    />
   </el-timeline>
 </template>
 
@@ -9,7 +16,16 @@ import TimelineItem from "./TimelineItem";
 
 export default {
   components: { TimelineItem },
-  props: ['files']
+  props: {
+    activeFile: String,
+    files: Array,
+  },
+  emits: ["item-click"],
+  methods: {
+    itemClick(i) {
+      this.$emit("item-click", i);
+    },
+  },
 };
 </script>
 

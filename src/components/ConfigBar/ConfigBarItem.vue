@@ -44,7 +44,9 @@ export default {
   border: 1px solid #e9eef3;
 }
 
-/* .button:active {
-  transform: scale(.9);
-} */
+.button[disabled] {
+  background: none;
+  opacity: 0.3;
+  border-color: transparent;
+}
 </style>

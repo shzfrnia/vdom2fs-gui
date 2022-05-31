@@ -6,6 +6,7 @@
       :label="btn.label"
       :icon="btn.icon"
       @click="callClickEmit(btn)"
+      :disabled="btn.disabled"
     />
   </div>
 </template>
@@ -17,27 +18,31 @@ export default {
   components: {
     ConfigBarItem,
   },
-  data() {
-    return {
-      buttons: [
+  props: {
+    disableParseButton: Boolean,
+  },
+  computed: {
+    buttons() {
+      return [
         {
           id: "export",
           label: "Export",
           icon: "el-icon-arrow-down",
         },
-        // {
-        //   id: "parse",
-        //   label: "Parse",
-        //   icon: "el-icon-video-play",
-        // },
-      ],
-    };
+        {
+          id: "parse",
+          label: "Parse",
+          icon: "el-icon-video-play",
+          disabled: this.disableParseButton,
+        },
+      ]
+    },
   },
   methods: {
     callClickEmit(btn) {
       this.$emit(`${btn.id.toString().toLowerCase()}-click`);
-    }
-  }
+    },
+  },
 };
 </script>
 

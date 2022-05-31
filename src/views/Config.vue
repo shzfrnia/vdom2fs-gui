@@ -5,8 +5,18 @@
     padding-right="0"
     padding-bottom="0"
   >
-    <config-bar @export-click="exportHandler" />
-    <div class="content-wrapper"><timeline-items :files="files" /></div>
+    <config-bar
+      @export-click="exportHandler"
+      @parse-click="parseHandler"
+      :disableParseButton="activeFile == null"
+    />
+    <div class="content-wrapper">
+      <timeline-items
+        :files="files"
+        @item-click="timelineItemClick"
+        :activeFile="activeFile"
+      />
+    </div>
   </default-layout>
 </template>
 
@@ -22,7 +32,13 @@ export default {
     return {
       config: {},
       files: [],
+      activeStates: {},
     };
+  },
+  computed: {
+    activeFile() {
+      return this.activeStates[this.config.id]?.activeFile
+    }
   },
   methods: {
     ...mapActions("configs", ["getConfigById"]),
@@ -30,6 +46,12 @@ export default {
       "exportApplication",
       "getConfigExportedAppsFiles",
     ]),
+    timelineItemClick(fileName) {
+      this.activeStates[this.config.id] = {
+        ...this.activeStates[this.config.id],
+        activeFile: fileName,
+      };
+    },
     async setupConfig() {
       this.config = await this.getConfigById(this.$route.params.id);
       this.updateFiles();
@@ -40,6 +62,9 @@ export default {
     async exportHandler() {
       await this.exportApplication(this.config);
       this.updateFiles();
+    },
+    async parseHandler() {
+      alert(this.activeFile);
     },
   },
   async beforeUpdate() {
