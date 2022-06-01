@@ -51,12 +51,15 @@ class FileManager {
 
   static async getFilesByPath(_path) {
     return new Promise((resolve) => {
-      fs.readdir(_path, (err, files) => {
+      fs.readdir(_path, { withFileTypes: true }, (err, files) => {
         if (err) {
           console.warn(err);
           resolve([]);
         } else {
-          resolve(files);
+          files = files.filter(
+            (file) => ![".DS_Store"].includes(file.name) && file.isFile()
+          );
+          resolve(files.map((file) => file.name));
         }
       });
     });
