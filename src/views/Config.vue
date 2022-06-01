@@ -37,16 +37,17 @@ export default {
   },
   computed: {
     activeFile() {
-      return this.activeStates[this.config.id]?.activeFile
-    }
+      return this.activeStates[this.config.id]?.activeFile;
+    },
   },
   methods: {
     ...mapActions("configs", ["getConfigById"]),
     ...mapActions("vdom2fs", [
       "exportApplication",
       "getConfigExportedAppsFiles",
+      "parseApplication",
     ]),
-    timelineItemClick(fileName) {
+    async timelineItemClick(fileName) {
       this.activeStates[this.config.id] = {
         ...this.activeStates[this.config.id],
         activeFile: fileName,
@@ -64,7 +65,7 @@ export default {
       this.updateFiles();
     },
     async parseHandler() {
-      alert(this.activeFile);
+      this.parseApplication({ config: this.config, file: this.activeFile });
     },
   },
   async beforeUpdate() {
