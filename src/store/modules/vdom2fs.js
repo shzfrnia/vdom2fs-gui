@@ -83,6 +83,10 @@ const getters = {
   getConfigExportedAppsFolderPath: (state, getters) => (config) => {
     return path.join(getters.currentPath, exportedAppsFolder, config.url);
   },
+
+  getExportedAppFilePath: (state, getters) => (config, fileName) => {
+    return path.join(getters.getConfigExportedAppsFolderPath(config), fileName);
+  },
 };
 
 const actions = {
@@ -99,8 +103,7 @@ const actions = {
     commit("setLoading", false, { root: true });
   },
 
-  async setPath({ commit }, payload) {
-    const { _path, errors } = payload;
+  async setPath({ commit }, { _path, errors }) {
     commit("setPathValidState", errors.length == 0);
     commit("setPathErrors", errors);
     commit("setPath", _path);
@@ -195,6 +198,21 @@ const actions = {
       )
     );
     commit("setLoading", false, { root: true });
+  },
+
+  async parseApplication({ getters }, { config, file }) {
+    const filePath = getters.getExportedAppFilePath(config, file);
+    return new Promise((resolve, reject) => {
+      Python.execute(getters.scriptsFullPath.parse, {
+        args: [
+          "-t",
+          path.join(getters.getConfigExportedAppsFolderPath(config), file.slice(0, -4)),
+          filePath
+        ],
+      })
+        .then(() => resolve(filePath))
+        .catch((err) => reject(err));
+    });
   },
 
   async getConfigExportedAppsFiles({ getters }, config) {
