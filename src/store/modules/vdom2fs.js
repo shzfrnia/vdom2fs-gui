@@ -84,8 +84,37 @@ const getters = {
     return path.join(getters.currentPath, exportedAppsFolder, config.url);
   },
 
-  getExportedAppFilePath: (state, getters) => (config, fileName) => {
-    return path.join(getters.getConfigExportedAppsFolderPath(config), fileName);
+  getExportedAppFilePath: (state, getters) => (config, folder) => {
+    return path.join(
+      getters.getConfigExportedAppsFolderPath(config),
+      folder,
+      `${config.name}.xml`
+    );
+  },
+
+  getExportedApp: (state, getters) => (config, folder) => {
+    const appXml = getters.getExportedAppFilePath(config, folder);
+    const appXmlSizeBytes = FileManager.getFileStatSync(appXml).size;
+    const parsedAppPath = path.join(
+      getters.getConfigExportedAppsFolderPath(config),
+      folder,
+      config.name
+    );
+    const isParsed = FileManager.fileExistsSync(parsedAppPath);
+    const parsedFolderSizeBytes = isParsed
+      ? 1
+      : null;
+
+    return {
+      appXml,
+      appXmlName: `${config.name}.xml`,
+      appXmlSizeBytes,
+      appXmlSizeFormatted: FileManager.formatBytes(appXmlSizeBytes),
+      name: folder,
+      isParsed,
+      parsedFolderSizeBytes,
+      parsedFolderSizeFormatted: FileManager.formatBytes(parsedFolderSizeBytes),
+    };
   },
 };
 
@@ -194,31 +223,40 @@ const actions = {
         getters.currentPath,
         exportedAppsFolder,
         config.url,
-        `${new Date().toString()}.xml`
+        new Date().toString(),
+        `${config.name}.xml`
       )
     );
     commit("setLoading", false, { root: true });
   },
 
-  async parseApplication({ getters }, { config, file }) {
-    const filePath = getters.getExportedAppFilePath(config, file);
+  async parseApplication({ commit, getters }, { config, folder }) {
+    commit("setLoading", true, { root: true });
+    const filePath = getters.getExportedAppFilePath(config, folder);
     return new Promise((resolve, reject) => {
+      const dist = path.join(
+        getters.getConfigExportedAppsFolderPath(config),
+        folder,
+        config.name
+      );
+      FileManager.rmdirSync(dist);
       Python.execute(getters.scriptsFullPath.parse, {
-        args: [
-          "-t",
-          path.join(getters.getConfigExportedAppsFolderPath(config), file.slice(0, -4)),
-          filePath
-        ],
+        args: ["-t", dist, filePath],
       })
-        .then(() => resolve(filePath))
+        .then(() => {
+          commit("setLoading", false, { root: true });
+          resolve(filePath);
+        })
         .catch((err) => reject(err));
     });
   },
 
-  async getConfigExportedAppsFiles({ getters }, config) {
-    return await FileManager.getFilesByPath(
-      getters.getConfigExportedAppsFolderPath(config)
-    );
+  async getConfigExportedApps({ getters }, config) {
+    return (
+      await FileManager.getFoldersByPath(
+        getters.getConfigExportedAppsFolderPath(config)
+      )
+    ).map((folder) => getters.getExportedApp(config, folder));
   },
 };
 

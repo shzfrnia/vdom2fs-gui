@@ -8,13 +8,13 @@
     <config-bar
       @export-click="exportHandler"
       @parse-click="parseHandler"
-      :disableParseButton="activeFile == null"
+      :disableParseButton="activeExportedApp == null"
     />
     <div class="content-wrapper">
       <timeline-items
-        :files="files"
+        :exportedApps="exportedApps"
         @item-click="timelineItemClick"
-        :activeFile="activeFile"
+        :activeExportedApp="activeExportedApp"
       />
     </div>
   </default-layout>
@@ -31,41 +31,45 @@ export default {
   data() {
     return {
       config: {},
-      files: [],
+      allExportedApps: [],
       activeStates: {},
     };
   },
   computed: {
-    activeFile() {
-      return this.activeStates[this.config.id]?.activeFile;
+    activeExportedApp() {
+      return this.activeStates[this.config.id]?.activeExportedApp;
     },
+    exportedApps() {
+      return [...this.allExportedApps].sort((f) => new Date(f)).reverse();
+    }
   },
   methods: {
     ...mapActions("configs", ["getConfigById"]),
     ...mapActions("vdom2fs", [
       "exportApplication",
-      "getConfigExportedAppsFiles",
+      "getConfigExportedApps",
       "parseApplication",
     ]),
-    async timelineItemClick(fileName) {
+    async timelineItemClick(exportedApp) {
       this.activeStates[this.config.id] = {
         ...this.activeStates[this.config.id],
-        activeFile: fileName,
+        activeExportedApp: exportedApp,
       };
     },
     async setupConfig() {
       this.config = await this.getConfigById(this.$route.params.id);
-      this.updateFiles();
+      this.updateExportedApps();
     },
-    async updateFiles() {
-      this.files = await this.getConfigExportedAppsFiles(this.config);
+    async updateExportedApps() {
+      this.allExportedApps = await this.getConfigExportedApps(this.config);
     },
     async exportHandler() {
       await this.exportApplication(this.config);
-      this.updateFiles();
+      this.updateExportedApps();
     },
     async parseHandler() {
-      this.parseApplication({ config: this.config, file: this.activeFile });
+      await this.parseApplication({ config: this.config, folder: this.activeExportedApp });
+      this.updateExportedApps();
     },
   },
   async beforeUpdate() {
