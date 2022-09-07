@@ -1,6 +1,7 @@
 import path from "path";
 import fs from "fs";
 import temp from "temp";
+import { shell } from "electron";
 
 class FileManager {
   static async filesExists(_path, files) {
@@ -97,6 +98,14 @@ class FileManager {
     const i = Math.floor(Math.log(bytes) / Math.log(k));
 
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
+  }
+
+  static openPath(_path) {
+    shell.openPath(_path);
+  }
+
+  static removeFolder(_path) {
+    fs.rmdirSync(_path, { recursive: true, force: true });
   }
 }
 

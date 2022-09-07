@@ -8,6 +8,8 @@
     <config-bar
       @export-click="exportHandler"
       @parse-click="parseHandler"
+      @remove-click="removeHandler"
+      @open-click="openHandler"
       :disableParseButton="activeExportedApp == null"
     />
     <div class="content-wrapper">
@@ -40,17 +42,26 @@ export default {
       return this.activeStates[this.config.id]?.activeExportedApp;
     },
     exportedApps() {
-      return [...this.allExportedApps].sort((f) => new Date(f)).reverse();
-    }
+      return [...this.allExportedApps].reverse();
+    },
+    currentExportedApp() {
+      return this.exportedApps.filter(
+        (el) => el.name == this.activeExportedApp
+      )[0];
+    },
   },
   methods: {
     ...mapActions("configs", ["getConfigById"]),
+    ...mapActions(["notify"]),
     ...mapActions("vdom2fs", [
       "exportApplication",
       "getConfigExportedApps",
       "parseApplication",
+      "openExportedAppFolder",
+      "removeExportedApp",
     ]),
     async timelineItemClick(exportedApp) {
+      console.log(exportedApp);
       this.activeStates[this.config.id] = {
         ...this.activeStates[this.config.id],
         activeExportedApp: exportedApp,
@@ -64,12 +75,58 @@ export default {
       this.allExportedApps = await this.getConfigExportedApps(this.config);
     },
     async exportHandler() {
+      const notificationPromise = this.notify({
+        title: "Message",
+        message: "Fetching application...",
+        duration: 0,
+        type: "info",
+      });
       await this.exportApplication(this.config);
+      notificationPromise.then((notification) => {
+        setTimeout(notification.close, 200);
+        this.notify({
+          title: "Success",
+          message: "Application was exported",
+          duration: 2000,
+          type: "success",
+        });
+      });
       this.updateExportedApps();
     },
     async parseHandler() {
-      await this.parseApplication({ config: this.config, folder: this.activeExportedApp });
+      const notificationPromise = this.notify({
+        title: "Message",
+        message: "Parse application...",
+        duration: 0,
+        type: "info",
+      });
+      await this.parseApplication(this.currentExportedApp);
+      notificationPromise.then((notification) => {
+        setTimeout(notification.close, 200);
+        this.notify({
+          title: "Success",
+          message: "Application was parsed",
+          duration: 2000,
+          type: "success",
+        });
+      });
       this.updateExportedApps();
+    },
+    async openHandler() {
+      this.openExportedAppFolder(this.currentExportedApp);
+    },
+    async removeHandler() {
+      this.removeExportedApp(this.currentExportedApp);
+      const indexOfApp = this.exportedApps.findIndex(
+        (el) => el.appXml === this.currentExportedApp.appXml
+      );
+      await this.updateExportedApps();
+      if (indexOfApp === 0 && this.exportedApps.length > 0) {
+        this.timelineItemClick(this.exportedApps[0].name);
+      } else {
+        console.log("reset");
+        this.timelineItemClick(null);
+      }
     },
   },
   async beforeUpdate() {

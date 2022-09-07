@@ -4,6 +4,8 @@
       <config-bar-items
         @export-click="$emit('export-click')"
         @parse-click="$emit('parse-click')"
+        @open-click="$emit('open-click')"
+        @remove-click="$emit('remove-click')"
         :disableParseButton="disableParseButton"
       />
     </el-col>
@@ -15,10 +17,15 @@ import ConfigBarItems from "./ConfigBarItems";
 
 export default {
   components: { ConfigBarItems },
-  emits: ["export-click", "parse-click"],
+  emits: ["export-click", "parse-click", "open-click", "remove-click"],
   props: {
-    disableParseButton: Boolean
-  }
+    disableParseButton: Boolean,
+  },
+  methods: {
+    check(event) {
+      console.log(event);
+    },
+  },
 };
 </script>
 

@@ -94,16 +94,16 @@ const getters = {
 
   getExportedApp: (state, getters) => (config, folder) => {
     const appXml = getters.getExportedAppFilePath(config, folder);
-    const appXmlSizeBytes = FileManager.getFileStatSync(appXml).size;
-    const parsedAppPath = path.join(
+    const fileStat = FileManager.getFileStatSync(appXml);
+    const appXmlSizeBytes = fileStat.size;
+    const creationDate = fileStat.ctime;
+    const appPath = path.join(
       getters.getConfigExportedAppsFolderPath(config),
-      folder,
-      config.name
+      folder
     );
+    const parsedAppPath = path.join(appPath, config.name);
     const isParsed = FileManager.fileExistsSync(parsedAppPath);
-    const parsedFolderSizeBytes = isParsed
-      ? 1
-      : null;
+    const parsedFolderSizeBytes = isParsed ? 1 : null;
 
     return {
       appXml,
@@ -114,6 +114,9 @@ const getters = {
       isParsed,
       parsedFolderSizeBytes,
       parsedFolderSizeFormatted: FileManager.formatBytes(parsedFolderSizeBytes),
+      creationDate,
+      folder: appPath,
+      config: { ...config },
     };
   },
 };
@@ -208,15 +211,19 @@ const actions = {
         `app_id = "${config.appId}"`,
       ].join(`\n`)
     );
-    await Python.execute(getters.scriptsFullPath.exporter, {
-      args: ["-c", info.path],
-    });
+    const pythonMessage = await Python.execute(
+      getters.scriptsFullPath.exporter,
+      {
+        args: ["-c", info.path],
+      }
+    );
     FileManager.cleanupTempFiles();
+    return pythonMessage;
   },
 
   async exportApplication({ commit, dispatch, getters }, config) {
     commit("setLoading", true, { root: true });
-    await dispatch("__exportApplication", config);
+    const pythonMessage = await dispatch("__exportApplication", config);
     await FileManager.moveFile(
       path.join(cwd(), "exported_app.xml"),
       path.join(
@@ -228,17 +235,14 @@ const actions = {
       )
     );
     commit("setLoading", false, { root: true });
+    return pythonMessage;
   },
 
-  async parseApplication({ commit, getters }, { config, folder }) {
+  async parseApplication({ commit, getters }, exportedApp) {
     commit("setLoading", true, { root: true });
-    const filePath = getters.getExportedAppFilePath(config, folder);
+    const filePath = exportedApp.appXml;
     return new Promise((resolve, reject) => {
-      const dist = path.join(
-        getters.getConfigExportedAppsFolderPath(config),
-        folder,
-        config.name
-      );
+      const dist = path.join(exportedApp.folder, exportedApp.config.name);
       FileManager.rmdirSync(dist);
       Python.execute(getters.scriptsFullPath.parse, {
         args: ["-t", dist, filePath],
@@ -256,7 +260,17 @@ const actions = {
       await FileManager.getFoldersByPath(
         getters.getConfigExportedAppsFolderPath(config)
       )
-    ).map((folder) => getters.getExportedApp(config, folder));
+    )
+      .map((folder) => getters.getExportedApp(config, folder))
+      .sort((a, b) => a.creationDate - b.creationDate);
+  },
+
+  openExportedAppFolder(context, exportedApp) {
+    FileManager.openPath(exportedApp.folder);
+  },
+
+  removeExportedApp(context, exportedApp) {
+    FileManager.removeFolder(exportedApp.folder);
   },
 };
 
