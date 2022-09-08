@@ -103,7 +103,9 @@ const getters = {
     );
     const parsedAppPath = path.join(appPath, config.name);
     const isParsed = FileManager.fileExistsSync(parsedAppPath);
-    const parsedFolderSizeBytes = isParsed ? 1 : null;
+    const parsedFolderSizeBytes = isParsed
+      ? FileManager.getFolderSize(appPath)
+      : null;
 
     return {
       appXml,
@@ -203,7 +205,7 @@ const actions = {
   },
 
   async __exportApplication({ getters }, config) {
-    const info = await FileManager.createTempFile(
+    const tempFileInfo = await FileManager.createTempFile(
       [
         `url = "https://${config.url}"`,
         `user = "${config.user}"`,
@@ -214,7 +216,7 @@ const actions = {
     const pythonMessage = await Python.execute(
       getters.scriptsFullPath.exporter,
       {
-        args: ["-c", info.path],
+        args: ["-c", tempFileInfo.path],
       }
     );
     FileManager.cleanupTempFiles();
@@ -223,7 +225,16 @@ const actions = {
 
   async exportApplication({ commit, dispatch, getters }, config) {
     commit("setLoading", true, { root: true });
-    const pythonMessage = await dispatch("__exportApplication", config);
+    let pythonMessage = "";
+    try {
+      pythonMessage = await dispatch("__exportApplication", config);
+    } catch (err) {
+      console.error(err);
+      alert("Check console", err);
+      commit("setLoading", false, { root: true });
+      return;
+    }
+
     await FileManager.moveFile(
       path.join(cwd(), "exported_app.xml"),
       path.join(

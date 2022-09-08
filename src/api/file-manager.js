@@ -2,6 +2,7 @@ import path from "path";
 import fs from "fs";
 import temp from "temp";
 import { shell } from "electron";
+import fastFolderSizeSync from "fast-folder-size/sync";
 
 class FileManager {
   static async filesExists(_path, files) {
@@ -30,19 +31,27 @@ class FileManager {
   }
 
   static cleanupTempFiles() {
-    temp.cleanup();
+    temp.cleanup((err, stats) => {
+      console.log(err, stats);
+    });
   }
 
-  static async createTempFile(src) {
+  static createTempFile(src) {
     return new Promise((resolve, reject) => {
       temp.track();
-      temp.open("tempconfig.txt", function(err, info) {
+      temp.open("tempvdom2fsconfig", function(err, info) {
         if (!err) {
-          fs.write(info.fd, src, () => {});
-          fs.close(info.fd, () => {
+          fs.write(info.fd, src, (err) => {
+            if (err) {
+              console.error(err);
+              reject("Error when creating temp file: ", err);
+            }
+          });
+          fs.close(info.fd, (err) => {
+            console.log("err", err);
             resolve(info);
           });
-        } else {
+        } else {'/;;/'
           reject(err);
         }
       });
@@ -86,6 +95,10 @@ class FileManager {
 
   static getFileStatSync(_path) {
     return fs.statSync(_path);
+  }
+
+  static getFolderSize(_path) {
+    return fastFolderSizeSync(_path);
   }
 
   static formatBytes(bytes, decimals = 2) {

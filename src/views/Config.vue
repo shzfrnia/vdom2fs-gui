@@ -61,7 +61,6 @@ export default {
       "removeExportedApp",
     ]),
     async timelineItemClick(exportedApp) {
-      console.log(exportedApp);
       this.activeStates[this.config.id] = {
         ...this.activeStates[this.config.id],
         activeExportedApp: exportedApp,
