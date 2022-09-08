@@ -19,7 +19,7 @@
 
 <script>
 import BaseLayout from "@/layouts/Base";
-import NavBar from "@/components/NavBar/NavBar";
+import NavBar from "@/components/navbar/NavBar";
 import { default as AppFooter } from "@/components/Footer";
 import { default as AppHeader } from "@/components/Header";
 import paddingsMixin from "@/components/utils/paddings-mixin";

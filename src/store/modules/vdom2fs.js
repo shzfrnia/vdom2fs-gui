@@ -2,7 +2,7 @@ import { cwd } from "process";
 import { FileManager } from "@/api/index";
 import { Python } from "@/api/index";
 import router from "@/router/index";
-import { remote } from "electron";
+import { remote, ipcRenderer } from "electron";
 import path from "path";
 const { net, dialog } = remote;
 
@@ -288,6 +288,14 @@ const actions = {
       config.name,
       getters.getConfigTextRepresentation(config)
     );
+  },
+
+  openConfigDialog(context, config) {
+    ipcRenderer.send("open-config-dialog", config);
+  },
+
+  openCreateConfigDialog({ dispatch }) {
+    dispatch("openConfigDialog", { id: -1 });
   },
 };
 

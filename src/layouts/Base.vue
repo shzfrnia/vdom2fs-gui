@@ -26,7 +26,7 @@
 
 <script>
 import Loader from "@/components/Loader";
-import ConfigDialog from "@/components/dialogs/ConfigDialog/ConfigDialog";
+import ConfigDialog from "@/components/dialogs/config-dialog/ConfigDialog";
 import { ipcRenderer } from "electron";
 import paddingsMixin from "@/components/utils/paddings-mixin";
 
@@ -42,12 +42,8 @@ export default {
     };
   },
   beforeCreate() {
-    ipcRenderer.on("open-config-dialog", (event, { config, create }) => {
-      const configCopy = { ...config };
-      if (create) {
-        configCopy.id = -1;
-      }
-      this.configDialog.config = configCopy;
+    ipcRenderer.on("open-config-dialog", (event, config) => {
+      this.configDialog.config = { ...config };
       this.configDialog.visible = true;
     });
   },

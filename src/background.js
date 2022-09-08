@@ -103,6 +103,6 @@ if (isDevelopment) {
   }
 }
 
-ipcMain.on("open-config-dialog", (event, arg) => {
-  event.reply("open-config-dialog", arg);
+ipcMain.on("open-config-dialog", (event, config) => {
+  event.reply("open-config-dialog", config);
 });

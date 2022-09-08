@@ -6,8 +6,9 @@
     :accept="accept"
     :on-preview="handlePreview"
     :on-remove="handleRemove"
-    :file-list="fileList"
     :multiple="multiple"
+    :on-change="handleChange"
+    ref="upload"
   >
     <i class="el-icon-upload"></i>
     <div class="el-upload__text">
@@ -47,11 +48,6 @@ export default {
       required: true,
       default: "",
     },
-    fileList: {
-      type: Array,
-      required: true,
-      default: () => [],
-    },
     handlePreview: {
       type: Function,
       required: true,
@@ -61,6 +57,11 @@ export default {
       type: Function,
       required: true,
       default: () => {},
+    },
+  },
+  methods: {
+    handleChange(file, fileList) {
+      this.$emit("onChange", { file, fileList });
     },
   },
 };

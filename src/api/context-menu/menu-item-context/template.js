@@ -1,5 +1,4 @@
 import store from "@/store/index";
-import { ipcRenderer } from "electron";
 
 export default (config, variables) => [
   {
@@ -14,21 +13,13 @@ export default (config, variables) => [
   {
     label: "Edit",
     click() {
-      const configCopy = {
-        ...store.state.global.configs.configs.filter(
-          (e) => e.id == config.id
-        )[0],
-      };
-      ipcRenderer.send("open-config-dialog", {
-        config: configCopy,
-        create: false,
-      });
+      store.dispatch("vdom2fs/openConfigDialog", { ...config });
     },
   },
   {
     label: "Export",
     click() {
-      store.dispatch('vdom2fs/exportConfig', config);
+      store.dispatch("vdom2fs/exportConfig", { ...config });
     },
   },
   {

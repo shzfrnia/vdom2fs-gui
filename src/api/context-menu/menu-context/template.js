@@ -1,10 +1,10 @@
-import { ipcRenderer } from "electron";
+import store from "@/store/index";
 
 export default () => [
   {
     label: "New config",
     click() {
-      ipcRenderer.send("open-config-dialog", { config: {}, create: true });
+      store.dispatch("vdom2fs/openCreateConfigDialog");
     },
   },
 ];

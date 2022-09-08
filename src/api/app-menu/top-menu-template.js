@@ -26,11 +26,8 @@ export default (isMac, win) => [
         {
           label: "New config",
           accelerator: isMac ? "cmd+N" : "ctrl+N",
-          click: async () => {
-            win.webContents.send("open-config-dialog", {
-              config: {},
-              create: true,
-            });
+          click: () => {
+            win.webContents.send("open-config-dialog", { id: -1 });
           },
         },
       ],
