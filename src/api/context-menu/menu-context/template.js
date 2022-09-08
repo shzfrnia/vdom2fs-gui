@@ -1,4 +1,6 @@
-export default (ipcRenderer) => [
+import { ipcRenderer } from "electron";
+
+export default () => [
   {
     label: "New config",
     click() {

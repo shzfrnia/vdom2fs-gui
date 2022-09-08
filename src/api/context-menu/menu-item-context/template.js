@@ -1,6 +1,9 @@
-export default (config, window, store, ipcRenderer, variables) => [
+import store from "@/store/index";
+import { ipcRenderer } from "electron";
+
+export default (config, variables) => [
   {
-    label: config.favorite ? "remove from favorite" : "add to favorite",
+    label: config.favorite ? "Remove from favorite" : "Add to favorite",
     click() {
       store.commit("configs/setFavorites", {
         id: config.id,
@@ -9,7 +12,7 @@ export default (config, window, store, ipcRenderer, variables) => [
     },
   },
   {
-    label: "edit",
+    label: "Edit",
     click() {
       const configCopy = {
         ...store.state.global.configs.configs.filter(
@@ -23,13 +26,13 @@ export default (config, window, store, ipcRenderer, variables) => [
     },
   },
   {
-    label: "export",
+    label: "Export",
     click() {
-      window.alert("export");
+      store.dispatch('vdom2fs/exportConfig', config);
     },
   },
   {
-    label: "reorder",
+    label: "Reorder",
     checked: variables.reorder.value,
     type: "checkbox",
     click() {
@@ -38,7 +41,7 @@ export default (config, window, store, ipcRenderer, variables) => [
   },
   { type: "separator" },
   {
-    label: "remove",
+    label: "Remove",
     click() {
       store.commit("configs/removeConfig", config.id);
     },

@@ -3,12 +3,16 @@ const { Menu } = remote;
 import template from "./template";
 
 export default () => {
-  const openMenuContext = () => {
-    const contextMenuTemplate = template();
+  const openMenuItemContext = (exportedApp, parseCallback, removeCallback) => {
+    const contextMenuTemplate = template(
+      exportedApp,
+      parseCallback,
+      removeCallback
+    );
     Menu.buildFromTemplate(contextMenuTemplate).popup({
       window: remote.getCurrentWindow(),
     });
   };
 
-  return { openMenuContext };
+  return { openMenuItemContext };
 };
