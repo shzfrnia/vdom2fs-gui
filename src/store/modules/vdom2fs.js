@@ -84,6 +84,15 @@ const getters = {
     return path.join(getters.currentPath, exportedAppsFolder, config.url);
   },
 
+  getConfigTextRepresentation: () => (config) => {
+    return [
+      `url = "https://${config.url}"`,
+      `user = "${config.user}"`,
+      `pass_md5 = '${config.passMd5}'`,
+      `app_id = "${config.appId}"`,
+    ].join(`\n`);
+  },
+
   getExportedAppFilePath: (state, getters) => (config, folder) => {
     return path.join(
       getters.getConfigExportedAppsFolderPath(config),
@@ -104,7 +113,7 @@ const getters = {
     const parsedAppPath = path.join(appPath, config.name);
     const isParsed = FileManager.fileExistsSync(parsedAppPath);
     const parsedFolderSizeBytes = isParsed
-      ? FileManager.getFolderSize(appPath)
+      ? FileManager.getFolderSize(parsedAppPath)
       : null;
 
     return {
@@ -206,12 +215,7 @@ const actions = {
 
   async __exportApplication({ getters }, config) {
     const tempFileInfo = await FileManager.createTempFile(
-      [
-        `url = "https://${config.url}"`,
-        `user = "${config.user}"`,
-        `pass_md5 = '${config.passMd5}'`,
-        `app_id = "${config.appId}"`,
-      ].join(`\n`)
+      getters.getConfigTextRepresentation(config)
     );
     const pythonMessage = await Python.execute(
       getters.scriptsFullPath.exporter,
@@ -252,18 +256,13 @@ const actions = {
   async parseApplication({ commit, getters }, exportedApp) {
     commit("setLoading", true, { root: true });
     const filePath = exportedApp.appXml;
-    return new Promise((resolve, reject) => {
-      const dist = path.join(exportedApp.folder, exportedApp.config.name);
-      FileManager.rmdirSync(dist);
-      Python.execute(getters.scriptsFullPath.parse, {
-        args: ["-t", dist, filePath],
-      })
-        .then(() => {
-          commit("setLoading", false, { root: true });
-          resolve(filePath);
-        })
-        .catch((err) => reject(err));
+    const dist = path.join(exportedApp.folder, exportedApp.config.name);
+    FileManager.rmdirSync(dist);
+    await Python.execute(getters.scriptsFullPath.parse, {
+      args: ["-t", dist, filePath],
     });
+    commit("setLoading", false, { root: true });
+    return filePath;
   },
 
   async getConfigExportedApps({ getters }, config) {
@@ -282,6 +281,13 @@ const actions = {
 
   removeExportedApp(context, exportedApp) {
     FileManager.removeFolder(exportedApp.folder);
+  },
+
+  exportConfig({ getters }, config) {
+    FileManager.saveAs(
+      config.name,
+      getters.getConfigTextRepresentation(config)
+    );
   },
 };
 

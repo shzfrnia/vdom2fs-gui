@@ -3,7 +3,6 @@
   <config-dialog
     v-model:show="configDialog.visible"
     v-model:config="configDialog.config"
-    :createMode="configDialog.createMode"
   />
   <loader :loading="$store.getters.loading">
     <div class="common-layout">

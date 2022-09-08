@@ -1,8 +1,9 @@
 import path from "path";
 import fs from "fs";
 import temp from "temp";
-import { shell } from "electron";
+import { shell, remote } from "electron";
 import fastFolderSizeSync from "fast-folder-size/sync";
+const { dialog } = remote;
 
 class FileManager {
   static async filesExists(_path, files) {
@@ -39,7 +40,6 @@ class FileManager {
       temp.track();
       temp.open("tempvdom2fsconfig", function(err, info) {
         if (!err) {
-          console.log(info);
           fs.write(info.fd, src, (err) => {
             if (err) {
               console.error(err);
@@ -48,10 +48,6 @@ class FileManager {
               resolve(info);
             }
           });
-          // fs.close(info.fd, (err) => {
-          //   console.log("err", err);
-          //   resolve(info);
-          // });
         } else {
           reject(err);
         }
@@ -120,6 +116,31 @@ class FileManager {
 
   static removeFolder(_path) {
     fs.rmdirSync(_path, { recursive: true, force: true });
+  }
+
+  static saveAs(fileName, src) {
+    dialog
+      .showSaveDialog({
+        title: "Select the File Path to save",
+        defaultPath: fileName,
+        buttonLabel: "Save",
+        filters: [
+          {
+            name: "Text Files",
+            extensions: ["txt"],
+          },
+        ],
+      })
+      .then((file) => {
+        if (!file.canceled) {
+          fs.writeFile(file.filePath.toString(), src, (err) => {
+            if (err) throw err;
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 }
 

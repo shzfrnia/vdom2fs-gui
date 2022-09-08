@@ -1,6 +1,6 @@
 <template>
   <my-dialog
-    dialogTitle="Create application config"
+    :dialogTitle="dialogTitle"
     @update:modelValue="onDialogShowUpdate"
     :model-value="show"
     @confirm-click="onConfirmClick"
@@ -42,7 +42,7 @@ export default {
   data() {
     return {
       formIsValid: false,
-      changedConfig: this.config,
+      changedConfig: { ...this.config },
     };
   },
   methods: {
@@ -69,6 +69,11 @@ export default {
           this.$refs.form.checkForm(this.config.id < 0);
         }, 1);
       }
+    },
+  },
+  computed: {
+    dialogTitle() {
+      return `${this.config.id === -1 ? "Create" : "Edit"} application config`;
     },
   },
 };

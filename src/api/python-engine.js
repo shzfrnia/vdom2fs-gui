@@ -1,7 +1,7 @@
 import { PythonShell } from "python-shell";
 
 class Python {
-  static async execute(path, options) {
+  static execute(path, options) {
     return new Promise((resolve, reject) => {
       PythonShell.run(
         path,

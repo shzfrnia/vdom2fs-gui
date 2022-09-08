@@ -4,10 +4,11 @@
       v-for="i in exportedApps"
       :key="i.name"
       :item="i"
-      @click="itemClick(i.name)"
+      @click="$emit('itemClick', i.name)"
       :color="i.name == activeExportedApp ? '#409eff' : null"
       :active="i.name == activeExportedApp"
       :type="i.isParsed ? 'success' : 'info'"
+      @right-click="$emit('itemRightClick', i)"
     />
   </el-timeline>
 </template>
@@ -21,12 +22,7 @@ export default {
     activeExportedApp: String,
     exportedApps: Array,
   },
-  emits: ["item-click"],
-  methods: {
-    itemClick(i) {
-      this.$emit("item-click", i);
-    },
-  },
+  emits: ["itemClick", "itemRightClick"],
 };
 </script>
 

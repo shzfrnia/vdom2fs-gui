@@ -13,7 +13,7 @@ export default [
   {
     path: "/config/:id",
     name: "Config",
-    component: () => import("@/views/Config.vue"),
+    component: () => import("@/views/config/Config.vue"),
     beforeEnter: redirectIfVdom2fsIsNotSeted,
   },
   {

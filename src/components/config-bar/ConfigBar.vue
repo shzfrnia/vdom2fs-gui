@@ -21,11 +21,6 @@ export default {
   props: {
     disableParseButton: Boolean,
   },
-  methods: {
-    check(event) {
-      console.log(event);
-    },
-  },
 };
 </script>
 

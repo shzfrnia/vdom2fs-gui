@@ -1,6 +1,6 @@
 <template>
   <el-timeline-item :timestamp="timestamp" placement="top" :class="activeClass">
-    <el-card>
+    <el-card @contextmenu.prevent.stop="$emit('rightClick')">
       <h4><i class="icon el-icon-document" />({{ xmlSize }})</h4>
       <h4 v-if="item.isParsed">
         <i class="icon el-icon-folder-opened" />{{ parsedAppSize }}

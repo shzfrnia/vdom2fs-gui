@@ -32,11 +32,15 @@
         :model-value="config.user"
       />
     </el-form-item>
-    <el-form-item label="Password md5" prop="passMd5">
+    <el-form-item label="Password(md5)" prop="passMd5">
       <el-input
         @update:model-value="updateField('passMd5', $event)"
         :model-value="config.passMd5"
-      />
+      >
+        <template v-slot:append>
+          <el-button @click="passwordToMd5" icon="el-icon-magic-stick">To md5</el-button>
+        </template>
+      </el-input>
     </el-form-item>
     <el-form-item label="Add to favorite" prop="favorite">
       <el-switch
@@ -49,6 +53,7 @@
 
 <script>
 import { mapActions } from "vuex";
+import md5 from 'crypto-js/md5';
 
 export default {
   emits: ["update:form-valid", "update:config"],
@@ -73,27 +78,24 @@ export default {
           {
             required: true,
             message: "Please input application name",
-            trigger: ["blur"],
           },
           {
-            min: 1,
-            max: 10,
-            message: "Length should be 3 to 5",
-            trigger: "change",
+            min: 5,
+            max: 16,
+            message: "Length should be 5 to 16",
           },
         ],
         appId: [
           {
             required: true,
             message: "Please input application id",
-            trigger: "blur",
           },
         ],
         url: [
           {
             required: true,
             message: "Please input application url",
-            trigger: "blur",
+            trigger: ["blur", "input"],
           },
           {
             required: true,
@@ -104,21 +106,19 @@ export default {
                 callback(new Error(e));
               }
             },
-            trigger: "blur",
+            //trigger: "blur",
           },
         ],
         user: [
           {
             required: true,
             message: "Please input user name",
-            trigger: "blur",
           },
         ],
         passMd5: [
           {
             required: true,
             message: "Please input md5 hash of passsword",
-            trigger: "blur",
           },
         ],
       },
@@ -127,6 +127,9 @@ export default {
   },
   methods: {
     ...mapActions("vdom2fs", ["checkApplicationUrl"]),
+    passwordToMd5() {
+      this.updateField('passMd5', md5(this.config.passMd5).toString());
+    },
     async updateField(name, value) {
       const configCopy = { ...this.config };
       configCopy[name] = value;
@@ -160,3 +163,9 @@ export default {
   },
 };
 </script>
+
+<style>
+.el-input input {
+  padding-right: 30px;
+}
+</style>
