@@ -31,9 +31,7 @@ class FileManager {
   }
 
   static cleanupTempFiles() {
-    temp.cleanup((err, stats) => {
-      console.log(err, stats);
-    });
+    temp.cleanup();
   }
 
   static createTempFile(src) {
@@ -41,17 +39,20 @@ class FileManager {
       temp.track();
       temp.open("tempvdom2fsconfig", function(err, info) {
         if (!err) {
+          console.log(info);
           fs.write(info.fd, src, (err) => {
             if (err) {
               console.error(err);
               reject("Error when creating temp file: ", err);
+            } else {
+              resolve(info);
             }
           });
-          fs.close(info.fd, (err) => {
-            console.log("err", err);
-            resolve(info);
-          });
-        } else {'/;;/'
+          // fs.close(info.fd, (err) => {
+          //   console.log("err", err);
+          //   resolve(info);
+          // });
+        } else {
           reject(err);
         }
       });
