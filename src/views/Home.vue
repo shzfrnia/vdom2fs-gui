@@ -35,7 +35,7 @@ export default {
       //   }
       //   console.log(data);
       // });
-      this.configsList = fileList;
+      console.log(fileList);
     },
   },
 };

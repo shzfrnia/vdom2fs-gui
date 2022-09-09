@@ -123,6 +123,7 @@ const getters = {
       appXmlSizeFormatted: FileManager.formatBytes(appXmlSizeBytes),
       name: folder,
       isParsed,
+      parsedFolder: parsedAppPath,
       parsedFolderSizeBytes,
       parsedFolderSizeFormatted: FileManager.formatBytes(parsedFolderSizeBytes),
       creationDate,
@@ -146,13 +147,13 @@ const actions = {
     commit("setLoading", false, { root: true });
   },
 
-  async setPath({ commit }, { _path, errors }) {
+  setPath({ commit }, { _path, errors }) {
     commit("setPathValidState", errors.length == 0);
     commit("setPathErrors", errors);
     commit("setPath", _path);
   },
 
-  async checkApplicationUrl(context, url) {
+  checkApplicationUrl(context, url) {
     return new Promise((resolve, reject) => {
       const request = net.request(`https://${url}`);
       request.on("response", (response) => {
@@ -233,8 +234,6 @@ const actions = {
     try {
       pythonMessage = await dispatch("__exportApplication", config);
     } catch (err) {
-      console.error(err);
-      alert("Check console", err);
       commit("setLoading", false, { root: true });
       return;
     }
@@ -296,6 +295,23 @@ const actions = {
 
   openCreateConfigDialog({ dispatch }) {
     dispatch("openConfigDialog", { id: -1 });
+  },
+
+  async migrateExportedApps({ dispatch }, { oldConfig, newConfig, callback }) {
+    const exportedApps = await dispatch("getConfigExportedApps", oldConfig);
+    const exportedAppsLenght = exportedApps.length;
+    const getPercentage = (value, all) => (value / all) * 100;
+    for (let i = 0; i < exportedAppsLenght; i++) {
+      const exportedApp = exportedApps[i];
+      const percentage = getPercentage(i + 1, exportedAppsLenght);
+      const newXmlPath = path.join(exportedApp.folder, `${newConfig.name}.xml`);
+      FileManager.renameSync(exportedApp.appXml, newXmlPath);
+      if (exportedApp.isParsed) {
+        const newParsedFolder = path.join(exportedApp.folder, newConfig.name);
+        FileManager.renameSync(exportedApp.parsedFolder, newParsedFolder);
+      }
+      callback({ percentage, done: i, all: exportedAppsLenght });
+    }
   },
 };
 

@@ -60,7 +60,7 @@ class FileManager {
     await fs.promises.rename(from, dest);
   }
 
-  static async readdir(_path) {
+  static readdir(_path) {
     return new Promise((resolve) => {
       fs.readdir(_path, { withFileTypes: true }, (err, files) => {
         if (err) {
@@ -141,6 +141,10 @@ class FileManager {
       .catch((err) => {
         console.log(err);
       });
+  }
+
+  static renameSync(oldPath, newPath) {
+    fs.renameSync(oldPath, newPath);
   }
 }
 

@@ -1,6 +1,8 @@
 import router from "@/router/index";
+import { h } from "vue";
+import { ElProgress } from "element-plus";
 
-// config 
+// config
 // {
 //   id: -1,
 //   name: "",
@@ -26,8 +28,8 @@ const state = () => ({
 });
 
 const mutations = {
-  // TODO add validation on uniq
   addConfig(state, config) {
+    // TODO add validation on uniq
     generateNextId(state.configs, config);
     state.configs.push(config);
     updateLocalSotrage(state.configs);
@@ -72,15 +74,44 @@ const getters = {
 };
 
 const actions = {
-  async addConfig({ commit }, config) {
+  addConfig({ commit }, config) {
     commit("addConfig", config);
   },
-  async updateConfig({ commit }, newConfig) {
-    commit(newConfig.id < 0 ? "addConfig" : "updateConfig", newConfig);
-  },
-  async getConfigById({ getters }, id) {
+  getConfigById({ getters }, id) {
     const config = getters.configs.filter((e) => e.id === parseInt(id));
     return config ? { ...config[0] } : null;
+  },
+  async updateConfig({ commit, dispatch }, newConfig) {
+    const configIsNew = newConfig.id < 0;
+    const oldConfig = await dispatch("getConfigById", newConfig.id);
+    commit(configIsNew ? "addConfig" : "updateConfig", newConfig);
+    if (configIsNew) return;
+
+    const vNodeElProgress = h(ElProgress, { percentage: 0 });
+    const message = {
+      title: "Updating config...",
+      duration: 0,
+      message: vNodeElProgress,
+    };
+    const notification = await dispatch("notify", message, { root: true });
+    vNodeElProgress.el.style.width = `285px`;
+    await dispatch(
+      "vdom2fs/migrateExportedApps",
+      {
+        oldConfig,
+        newConfig,
+        callback: ({ percentage }) => {
+          vNodeElProgress.el.getElementsByClassName(
+            "el-progress-bar__inner"
+          )[0].style.width = `${percentage}%`;
+          vNodeElProgress.el.getElementsByClassName(
+            "el-progress__text"
+          )[0].innerHTML = `<span>${percentage}%</span>`;
+        },
+      },
+      { root: true }
+    );
+    setTimeout(notification.close, 1000);
   },
 };
 
