@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import { default as DefaultLayout } from "@/layouts/Default";
 import ConfigBar from "@/components/config-bar/ConfigBar";
 import TimelineItems from "@/components/timeline/TimelineItems";
@@ -52,12 +52,12 @@ export default {
   components: { DefaultLayout, ConfigBar, TimelineItems },
   data() {
     return {
-      config: {},
       allExportedApps: [],
       activeStates: {},
     };
   },
   computed: {
+    ...mapGetters("configs", ["getConfigById"]),
     activeExportedApp() {
       return this.activeStates[this.config.id]?.activeExportedApp;
     },
@@ -69,9 +69,11 @@ export default {
         (el) => el.name == this.activeExportedApp
       )[0];
     },
+    config() {
+      return { ...this.getConfigById(this.$route.params.id) };
+    },
   },
   methods: {
-    ...mapActions("configs", ["getConfigById"]),
     ...mapActions("vdom2fs", ["getConfigExportedApps"]),
     async timelineItemClick(exportedApp) {
       this.activeStates[this.config.id] = {
@@ -87,7 +89,6 @@ export default {
       );
     },
     async setupConfig() {
-      this.config = await this.getConfigById(this.$route.params.id);
       this.updateExportedApps();
     },
     async updateExportedApps() {
