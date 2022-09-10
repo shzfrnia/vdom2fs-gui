@@ -4,8 +4,9 @@
       <uploader
         accept=".txt"
         tip="Upload or create config file"
-        :multiple="true"
-        @on-change="uploaderOnChange"
+        :multiple="false"
+        @on-success="uploaderSuccess"
+        :show-file-list="false"
       />
       <el-button
         @click="openCreateConfigDialog"
@@ -26,16 +27,12 @@ export default {
   components: { DefaultLayout, Uploader },
   name: "Home",
   methods: {
-    ...mapActions("vdom2fs", ["openCreateConfigDialog"]),
-    uploaderOnChange({ fileList }) {
-      // fs.readFile(fileList[0].raw.path, "utf8", (err, data) => {
-      //   if (err) {
-      //     console.error(err);
-      //     return;
-      //   }
-      //   console.log(data);
-      // });
-      console.log(fileList);
+    ...mapActions("configs", [
+      "openCreateConfigDialog",
+      "openCreateDialogConfigFromFile",
+    ]),
+    uploaderSuccess({ file }) {
+      this.openCreateDialogConfigFromFile(file);
     },
   },
 };
