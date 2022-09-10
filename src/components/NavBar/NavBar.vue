@@ -10,7 +10,7 @@
           icon="el-icon-plus"
           url="Create config"
         />
-        <el-divider margin="0" v-if="favoritesConfigs.length > 0"></el-divider>
+        <el-divider margin="0"></el-divider>
         <nav-bar-items v-model="configs" :show-favorites="true" />
         <el-divider margin="0" v-if="favoritesConfigs.length > 0"></el-divider>
         <nav-bar-items v-model="configs" :show-favorites="false" />
