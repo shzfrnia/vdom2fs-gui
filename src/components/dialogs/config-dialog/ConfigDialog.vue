@@ -63,12 +63,13 @@ export default {
     },
   },
   watch: {
-    async show(value) {
-      if (value) {
-        setTimeout(() => {
-          this.$refs.form.checkForm(this.config.id < 0);
-        }, 1);
-      }
+    show: {
+      handler(value) {
+        if (value) {
+          this.$refs.form.checkForm(this.config.id < 0 && !this.config.name);
+        }
+      },
+      flush: "post",
     },
   },
   computed: {

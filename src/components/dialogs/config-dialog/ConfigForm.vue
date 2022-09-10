@@ -29,9 +29,9 @@
         <template v-slot:append>
           <el-button
             @click="tryFetchApplicationId"
-            :icon="
-              fetchingApplicationId ? 'el-icon-loading' : 'el-icon-magic-stick'
-            "
+            :icon="`el-icon-${
+              fetchingApplicationId ? 'loading' : 'magic-stick'
+            }`"
           >
             Fetch
           </el-button>
@@ -163,9 +163,9 @@ export default {
     },
     async tryFetchApplicationId() {
       this.fetchingApplicationId = true;
-      this.$refs.webview.src = `https://${this.config.url}`;
       this.$refs.webview.removeEventListener("dom-ready", this.webViewOnload);
       this.$refs.webview.addEventListener("dom-ready", this.webViewOnload);
+      this.$refs.webview.src = `https://${this.config.url}`;
     },
     async updateField(name, value) {
       const configCopy = { ...this.config };

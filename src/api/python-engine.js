@@ -13,6 +13,17 @@ class Python {
       );
     });
   }
+  static runString(src, messageCallback) {
+    return new Promise((resolve, reject) => {
+      const python = PythonShell.runString(src, null, (err) => {
+        if (err) {
+          reject(err);
+        }
+        resolve();
+      });
+      python.on("message", messageCallback);
+    });
+  }
 }
 
 export default Python;

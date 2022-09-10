@@ -3,6 +3,14 @@
   <el-row @contextmenu.prevent="openMenuContext">
     <el-col :span="24">
       <el-menu class="el-menu-vertical-demo">
+        <nav-bar-item
+          class="menu-item"
+          :to="{ name: 'Home' }"
+          label="New"
+          icon="el-icon-plus"
+          url="Create config"
+        />
+        <el-divider margin="0" v-if="favoritesConfigs.length > 0"></el-divider>
         <nav-bar-items v-model="configs" :show-favorites="true" />
         <el-divider margin="0" v-if="favoritesConfigs.length > 0"></el-divider>
         <nav-bar-items v-model="configs" :show-favorites="false" />
@@ -15,12 +23,13 @@
 import { mapGetters, mapMutations } from "vuex";
 import NavBarItems from "./NavBarItems";
 import menuContextSetup from "@/api/context-menu/menu-context/menu-setup";
+import navBarItem from "./NavBarItem";
 
 export default {
   setup() {
-    return { ...menuContextSetup() }
+    return { ...menuContextSetup() };
   },
-  components: { NavBarItems },
+  components: { NavBarItems, navBarItem },
   methods: {
     ...mapMutations("configs", ["updateConfigs"]),
   },

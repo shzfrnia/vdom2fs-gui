@@ -8,6 +8,7 @@
     :on-remove="handleRemove"
     :multiple="multiple"
     :on-change="handleChange"
+    :on-success="handleSuccess"
     ref="upload"
   >
     <i class="el-icon-upload"></i>
@@ -58,10 +59,18 @@ export default {
       required: true,
       default: () => {},
     },
+    showFileList: {
+      type: Boolean,
+      required: true,
+      default: false,
+    }
   },
   methods: {
     handleChange(file, fileList) {
       this.$emit("onChange", { file, fileList });
+    },
+    handleSuccess(response, file, fileList) {
+      this.$emit("onSuccess", { response, file, fileList });
     },
   },
 };
