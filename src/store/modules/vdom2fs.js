@@ -1,8 +1,8 @@
 import { cwd } from "process";
 import { FileManager } from "@/api/index";
-import { Python } from "@/api/index";
+import Python from "@/api/python-engine";
 import router from "@/router/index";
-import { remote, ipcRenderer } from "electron";
+import { remote } from "electron";
 import path from "path";
 const { net, dialog } = remote;
 
@@ -81,7 +81,11 @@ const getters = {
   },
 
   getConfigExportedAppsFolderPath: (state, getters) => (config) => {
-    return path.join(getters.currentPath, exportedAppsFolder, config.url);
+    return path.join(
+      getters.currentPath,
+      exportedAppsFolder,
+      config.id.toString()
+    );
   },
 
   getConfigTextRepresentation: () => (config) => {
@@ -241,9 +245,7 @@ const actions = {
     await FileManager.moveFile(
       path.join(cwd(), "exported_app.xml"),
       path.join(
-        getters.currentPath,
-        exportedAppsFolder,
-        config.url,
+        getters.getConfigExportedAppsFolderPath(config),
         new Date().toString(),
         `${config.name}.xml`
       )
@@ -282,21 +284,6 @@ const actions = {
     FileManager.removeFolder(exportedApp.folder);
   },
 
-  exportConfig({ getters }, config) {
-    FileManager.saveAs(
-      config.name,
-      getters.getConfigTextRepresentation(config)
-    );
-  },
-
-  openConfigDialog(context, config) {
-    ipcRenderer.send("open-config-dialog", config);
-  },
-
-  openCreateConfigDialog({ dispatch }) {
-    dispatch("openConfigDialog", { id: -1 });
-  },
-
   async migrateExportedApps({ dispatch }, { oldConfig, newConfig, callback }) {
     const exportedApps = await dispatch("getConfigExportedApps", oldConfig);
     const exportedAppsLenght = exportedApps.length;
@@ -312,6 +299,10 @@ const actions = {
       }
       callback({ percentage, done: i, all: exportedAppsLenght });
     }
+  },
+
+  removeConfigFolder({ getters }, config) {
+    FileManager.rmdirSync(getters.getConfigExportedAppsFolderPath(config));
   },
 };
 

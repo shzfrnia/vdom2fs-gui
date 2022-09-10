@@ -13,13 +13,13 @@ export default (config, variables) => [
   {
     label: "Edit",
     click() {
-      store.dispatch("vdom2fs/openConfigDialog", { ...config });
+      store.dispatch("configs/openConfigDialog", { ...config });
     },
   },
   {
     label: "Export",
     click() {
-      store.dispatch("vdom2fs/exportConfig", { ...config });
+      store.dispatch("configs/exportConfig", { ...config });
     },
   },
   {
@@ -34,7 +34,7 @@ export default (config, variables) => [
   {
     label: "Remove",
     click() {
-      store.commit("configs/removeConfig", config.id);
+      store.dispatch("configs/removeConfig", config.id);
     },
   },
 ];

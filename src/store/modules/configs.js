@@ -1,6 +1,9 @@
 import router from "@/router/index";
 import { h } from "vue";
 import { ElProgress } from "element-plus";
+import { ipcRenderer } from "electron";
+import { Python } from "@/api";
+import FileManager from "@/api/file-manager";
 
 // config
 // {
@@ -34,7 +37,6 @@ const mutations = {
     state.configs.push(config);
     updateLocalSotrage(state.configs);
   },
-  // FIXME TODO this is async action
   removeConfig(state, id) {
     const currentRoute = router.currentRoute.value;
     if (currentRoute.name == "Config" && currentRoute.params.id == id) {
@@ -71,19 +73,19 @@ const getters = {
   notFavoritesConfigs(state, getters) {
     return getters.configs.filter((el) => !el.favorite);
   },
+  getConfigById: (state, getters) => (id) => {
+    const config = getters.configs.filter((e) => e.id === parseInt(id));
+    return config ? { ...config[0] } : null;
+  },
 };
 
 const actions = {
   addConfig({ commit }, config) {
     commit("addConfig", config);
   },
-  getConfigById({ getters }, id) {
-    const config = getters.configs.filter((e) => e.id === parseInt(id));
-    return config ? { ...config[0] } : null;
-  },
-  async updateConfig({ commit, dispatch }, newConfig) {
+  async updateConfig({ commit, dispatch, getters }, newConfig) {
     const configIsNew = newConfig.id < 0;
-    const oldConfig = await dispatch("getConfigById", newConfig.id);
+    const oldConfig = getters.getConfigById(newConfig.id);
     commit(configIsNew ? "addConfig" : "updateConfig", newConfig);
     if (configIsNew) return;
 
@@ -92,6 +94,7 @@ const actions = {
       title: "Updating config...",
       duration: 0,
       message: vNodeElProgress,
+      type: "info",
     };
     const notification = await dispatch("notify", message, { root: true });
     vNodeElProgress.el.style.width = `285px`;
@@ -112,6 +115,44 @@ const actions = {
       { root: true }
     );
     setTimeout(notification.close, 1000);
+  },
+  async removeConfig({ commit, dispatch, getters }, id) {
+    dispatch("vdom2fs/removeConfigFolder", getters.getConfigById(id), {
+      root: true,
+    });
+    commit("removeConfig", id);
+  },
+  exportConfig({ getters }, config) {
+    FileManager.saveAs(
+      config.name,
+      getters.getConfigTextRepresentation(config)
+    );
+  },
+  openConfigDialog(context, config) {
+    ipcRenderer.send("open-config-dialog", config);
+  },
+  openCreateConfigDialog({ dispatch }, config) {
+    dispatch("openConfigDialog", { ...config, id: -1 });
+  },
+  openCreateDialogConfigFromFile({ dispatch }, file) {
+    const rows = [
+      `import sys`,
+      `import imp`,
+      `import json`,
+      `sys.dont_write_bytecode = True`,
+      `config = imp.load_source("config", "${file.raw.path}")`,
+      `print(json.dumps({"url": config.url, "user": config.user, "pass_md5": config.pass_md5, "app_id": config.app_id}))`,
+    ];
+    Python.runString(rows.join("\n"), (m) => {
+      const config = JSON.parse(m);
+      dispatch("openCreateConfigDialog", {
+        name: file.name,
+        url: config.url.replace("https://", ""),
+        appId: config.app_id,
+        user: config.user,
+        passMd5: config.pass_md5,
+      });
+    });
   },
 };
 

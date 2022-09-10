@@ -4,7 +4,7 @@ export default () => [
   {
     label: "New config",
     click() {
-      store.dispatch("vdom2fs/openCreateConfigDialog");
+      store.dispatch("configs/openCreateConfigDialog");
     },
   },
 ];
