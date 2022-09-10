@@ -85,8 +85,9 @@ a,
 
 .wrapper {
   display: grid;
-  grid-template-areas: "icon label"  
-                       "icon url";
+  grid-template-areas:
+    "icon label"
+    "icon url";
 }
 
 .url-label {
@@ -96,5 +97,17 @@ a,
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+
+.dragging .menu-item:hover {
+  background: unset;
+}
+
+.menu-item:hover {
+  background: #ecf5ff;
+}
+
+.menu-item:active {
+  cursor: grabbing;
 }
 </style>

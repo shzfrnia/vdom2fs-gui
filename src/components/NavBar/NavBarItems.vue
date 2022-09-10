@@ -9,17 +9,15 @@
     @change="$emit('update:modelValue', modelValue)"
   >
     <template #item="{ element }">
-      <div>
-        <nav-bar-item
-          class="menu-item"
-          :class="{ hide: showFavorites ^ (element.favorite == true) }"
-          @contextmenu.prevent.stop="openMenuItemContext(element)"
-          :to="{ name: 'Config', params: { id: element.id } }"
-          :label="element.name"
-          :url="element.url"
-          :icon="reorder ? 'el-icon-d-caret' : 'el-icon-menu'"
-        />
-      </div>
+      <nav-bar-item
+        class="menu-item"
+        :class="{ hide: showFavorites ^ (element.favorite == true) }"
+        @contextmenu.prevent.stop="openMenuItemContext(element)"
+        :to="{ name: 'Config', params: { id: element.id } }"
+        :label="element.name"
+        :url="element.url"
+        :icon="reorder ? 'el-icon-d-caret' : 'el-icon-menu'"
+      />
     </template>
   </draggable>
 </template>
@@ -60,18 +58,6 @@ export default {
 <style scoped>
 .hide {
   display: none;
-}
-
-.dragging .menu-item:hover {
-  background: unset;
-}
-
-.menu-item:hover {
-  background: #ecf5ff;
-}
-
-.menu-item:active {
-  cursor: grabbing;
 }
 
 .sortable-ghost {
