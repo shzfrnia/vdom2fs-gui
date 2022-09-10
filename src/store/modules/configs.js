@@ -77,6 +77,14 @@ const getters = {
     const config = getters.configs.filter((e) => e.id === parseInt(id));
     return config ? { ...config[0] } : null;
   },
+  getConfigTextRepresentation: () => (config) => {
+    return [
+      `url = "https://${config.url}"`,
+      `user = "${config.user}"`,
+      `pass_md5 = '${config.passMd5}'`,
+      `app_id = "${config.appId}"`,
+    ].join(`\n`);
+  },
 };
 
 const actions = {

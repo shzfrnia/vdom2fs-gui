@@ -88,15 +88,6 @@ const getters = {
     );
   },
 
-  getConfigTextRepresentation: () => (config) => {
-    return [
-      `url = "https://${config.url}"`,
-      `user = "${config.user}"`,
-      `pass_md5 = '${config.passMd5}'`,
-      `app_id = "${config.appId}"`,
-    ].join(`\n`);
-  },
-
   getExportedAppFilePath: (state, getters) => (config, folder) => {
     return path.join(
       getters.getConfigExportedAppsFolderPath(config),
@@ -218,9 +209,9 @@ const actions = {
     }
   },
 
-  async __exportApplication({ getters }, config) {
+  async __exportApplication({ getters, rootGetters }, config) {
     const tempFileInfo = await FileManager.createTempFile(
-      getters.getConfigTextRepresentation(config)
+      rootGetters["configs/getConfigTextRepresentation"](config)
     );
     const pythonMessage = await Python.execute(
       getters.scriptsFullPath.exporter,
@@ -238,6 +229,7 @@ const actions = {
     try {
       pythonMessage = await dispatch("__exportApplication", config);
     } catch (err) {
+      // TODO error notification
       commit("setLoading", false, { root: true });
       return;
     }
