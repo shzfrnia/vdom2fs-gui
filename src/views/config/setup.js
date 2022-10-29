@@ -33,7 +33,7 @@ const fetchingApplicationMessage = {
   type: "info",
 };
 
-const fetchingApplicationSuccesMessage = {
+const fetchingApplicationSuccessMessage = {
   title: "Success",
   message: "Application was exported",
   duration: 2000,
@@ -48,7 +48,7 @@ export const exportApplication = async (config, callback) => {
   await store.dispatch("vdom2fs/exportApplication", config);
   notificationPromise.then((notification) => {
     setTimeout(notification.close, 200);
-    store.dispatch("notify", fetchingApplicationSuccesMessage);
+    store.dispatch("notify", fetchingApplicationSuccessMessage);
   });
   if (callback) {
     callback.call();

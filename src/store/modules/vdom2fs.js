@@ -238,7 +238,7 @@ const actions = {
       path.join(cwd(), "exported_app.xml"),
       path.join(
         getters.getConfigExportedAppsFolderPath(config),
-        new Date().toString(),
+        new Date().getTime().toString(),
         `${config.name}.xml`
       )
     );

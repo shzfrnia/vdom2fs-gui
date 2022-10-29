@@ -14,7 +14,7 @@ export default {
   props: ["item", "active"],
   computed: {
     timestamp() {
-      return this.item.name.split(" ").slice(0, 5).join(" ");
+      return new Date(Number(this.item.name) * 1000).toLocaleString();
     },
     activeClass() {
       return this.active ? "active" : "";
