@@ -1,16 +1,16 @@
-import app from "@/main.js";
+import app from '@/main.js'
 
 const state = () => ({
   notifications: [],
-});
+})
 
 const mutations = {
   addNotification(state, notification) {
-    state.notifications.push(notification);
+    state.notifications.push(notification)
   },
-};
+}
 
-const getters = {};
+const getters = {}
 
 const actions = {
   notify: {
@@ -19,24 +19,24 @@ const actions = {
       return new Promise((resolve) => {
         setTimeout(() => {
           const notification = app.$notify({
-            title: payload.title || "",
-            message: payload.message || "",
+            title: payload.title || '',
+            message: payload.message || '',
             duration: payload?.duration === null ? 4500 : payload.duration,
-            type: payload.type || "",
-            position: payload.position || "top-right",
-          });
-          commit("addNotification", notification);
-          resolve(notification);
-        }, 0);
-      });
+            type: payload.type || '',
+            position: payload.position || 'top-right',
+          })
+          commit('addNotification', notification)
+          resolve(notification)
+        }, 0)
+      })
     },
   },
   async clearAll({ state }) {
     while (state.notifications.length) {
-      state.notifications.pop().close();
+      state.notifications.pop().close()
     }
   },
-};
+}
 
 export default {
   namespaced: true,
@@ -44,4 +44,4 @@ export default {
   mutations,
   getters,
   actions,
-};
+}

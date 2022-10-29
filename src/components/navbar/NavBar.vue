@@ -1,4 +1,3 @@
-
 <template>
   <el-row @contextmenu.prevent="openMenuContext">
     <el-col :span="24">
@@ -20,31 +19,31 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from "vuex";
-import NavBarItems from "./NavBarItems";
-import menuContextSetup from "@/api/context-menu/menu-context/menu-setup";
-import navBarItem from "./NavBarItem";
+import { mapGetters, mapMutations } from 'vuex'
+import NavBarItems from './NavBarItems'
+import menuContextSetup from '@/api/context-menu/menu-context/menu-setup'
+import navBarItem from './NavBarItem'
 
 export default {
   setup() {
-    return { ...menuContextSetup() };
+    return { ...menuContextSetup() }
   },
   components: { NavBarItems, navBarItem },
   methods: {
-    ...mapMutations("configs", ["updateConfigs"]),
+    ...mapMutations('configs', ['updateConfigs']),
   },
   computed: {
-    ...mapGetters("configs", ["favoritesConfigs"]),
+    ...mapGetters('configs', ['favoritesConfigs']),
     configs: {
       get() {
-        return this.$store.state.global.configs.configs;
+        return this.$store.state.global.configs.configs
       },
       set(value) {
-        this.updateConfigs(value);
+        this.updateConfigs(value)
       },
     },
   },
-};
+}
 </script>
 
 <style scoped>

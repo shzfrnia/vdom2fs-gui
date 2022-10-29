@@ -11,27 +11,27 @@
 
 <script>
 export default {
-  props: ["item", "active"],
+  props: ['item', 'active'],
   computed: {
     timestamp() {
-      return new Date(Number(this.item.name) * 1000).toLocaleString();
+      return new Date(Number(this.item.name) * 1000).toLocaleString()
     },
     activeClass() {
-      return this.active ? "active" : "";
+      return this.active ? 'active' : ''
     },
     xmlName() {
-      return this.item.appXmlName;
+      return this.item.appXmlName
     },
     xmlSize() {
-      return this.item.appXmlSizeFormatted;
+      return this.item.appXmlSizeFormatted
     },
     parsedAppSize() {
       return this.item.isParsed
         ? `(${this.item.parsedFolderSizeFormatted})`
-        : ``;
+        : ''
     },
   },
-};
+}
 </script>
 
 <style>

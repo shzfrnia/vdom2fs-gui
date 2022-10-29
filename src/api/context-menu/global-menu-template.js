@@ -1,8 +1,8 @@
 export default (defaultActions, parameters, browserWindow) => [
   defaultActions.copy(),
   {
-    label: "Rainbow",
+    label: 'Rainbow',
     // Only show it when right-clicking images
-    visible: parameters.mediaType === "image",
-  }
-];
+    visible: parameters.mediaType === 'image',
+  },
+]

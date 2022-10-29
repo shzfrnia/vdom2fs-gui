@@ -8,7 +8,11 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="closeDialog"> Cancel </el-button>
-        <el-button type="primary" :disabled="confirmBtnDisabled" @click="$emit('confirm-click')">
+        <el-button
+          type="primary"
+          :disabled="confirmBtnDisabled"
+          @click="$emit('confirm-click')"
+        >
           Confirm
         </el-button>
       </span>
@@ -19,7 +23,7 @@
 <script>
 export default {
   inheritAttrs: false,
-  emits: ["confirm-click", "update:modelValue"],
+  emits: ['confirm-click', 'update:modelValue'],
   props: {
     modelValue: {
       type: Boolean,
@@ -28,7 +32,7 @@ export default {
     },
     dialogTitle: {
       type: String,
-      default: "",
+      default: '',
       required: true,
     },
     confirmBtnDisabled: {
@@ -39,8 +43,8 @@ export default {
   },
   methods: {
     async closeDialog() {
-      this.$emit("update:modelValue", false);
+      this.$emit('update:modelValue', false)
     },
   },
-};
+}
 </script>

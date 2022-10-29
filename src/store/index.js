@@ -2,9 +2,9 @@ import { createStore } from 'vuex'
 import global from './modules/global'
 import vdom2fs from './modules/vdom2fs'
 
-export default new createStore({
+export default createStore({
   modules: {
-      global,
-      vdom2fs
+    global,
+    vdom2fs,
   },
 })

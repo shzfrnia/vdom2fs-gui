@@ -1,4 +1,3 @@
-
 <template>
   <base-layout
     :padding-top="paddingTop"
@@ -18,11 +17,11 @@
 </template>
 
 <script>
-import BaseLayout from "@/layouts/Base";
-import NavBar from "@/components/navbar/NavBar";
-import { default as AppFooter } from "@/components/Footer";
-import { default as AppHeader } from "@/components/Header";
-import paddingsMixin from "@/components/utils/paddings-mixin";
+import BaseLayout from '@/layouts/BaseLayout'
+import NavBar from '@/components/navbar/NavBar'
+import AppFooter from '@/components/AppFooter'
+import AppHeader from '@/components/AppHeader'
+import paddingsMixin from '@/components/utils/paddings-mixin'
 
 export default {
   mixins: [paddingsMixin],
@@ -32,7 +31,7 @@ export default {
     BaseLayout,
     AppFooter,
   },
-};
+}
 </script>
 
 <style scoped>

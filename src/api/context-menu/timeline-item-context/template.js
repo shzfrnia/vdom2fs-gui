@@ -1,29 +1,29 @@
-import configSetup from "@/views/config/setup";
+import configSetup from '@/views/config/setup'
 
 const {
   parseExportedApp: parseHandler,
   openFolderOfExportedApp: openHandler,
   removeExportedApp: removeHandler,
-} = configSetup();
+} = configSetup()
 
 export default (exportedApp, parseCallback, removeCallback) => [
   {
-    label: "Parse",
+    label: 'Parse',
     click() {
-      parseHandler(exportedApp, parseCallback);
+      parseHandler(exportedApp, parseCallback)
     },
   },
-  { type: "separator" },
+  { type: 'separator' },
   {
-    label: "Folder",
+    label: 'Folder',
     click() {
-      openHandler(exportedApp);
+      openHandler(exportedApp)
     },
   },
   {
-    label: "Remove",
+    label: 'Remove',
     click() {
-      removeHandler(exportedApp, removeCallback);
+      removeHandler(exportedApp, removeCallback)
     },
   },
-];
+]

@@ -24,7 +24,7 @@
 
 <script>
 export default {
-  emits: ["click"],
+  emits: ['click'],
   props: {
     label: {
       type: String,
@@ -44,7 +44,7 @@ export default {
       default: false,
     },
   },
-};
+}
 </script>
 
 <style scoped>

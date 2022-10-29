@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import ConfigBarItem from "./ConfigBarItem";
+import ConfigBarItem from './ConfigBarItem'
 
 export default {
   components: {
@@ -26,30 +26,30 @@ export default {
     buttons() {
       return [
         {
-          id: "export",
-          label: "Export",
-          tooltip: "Export application",
-          icon: "el-icon-arrow-down",
+          id: 'export',
+          label: 'Export',
+          tooltip: 'Export application',
+          icon: 'el-icon-arrow-down',
         },
         {
-          id: "parse",
-          label: "Parse",
-          tooltip: "Parse exported xml to folder tree",
-          icon: "el-icon-video-play",
+          id: 'parse',
+          label: 'Parse',
+          tooltip: 'Parse exported xml to folder tree',
+          icon: 'el-icon-video-play',
           disabled: this.disableParseButton,
         },
         {
-          id: "open",
-          label: "Folder",
-          tooltip: "Open folder",
-          icon: "el-icon-folder",
+          id: 'open',
+          label: 'Folder',
+          tooltip: 'Open folder',
+          icon: 'el-icon-folder',
           disabled: this.disableParseButton,
         },
         {
-          id: "remove",
-          label: "Remove",
-          tooltip: "Remove folder",
-          icon: "el-icon-delete",
+          id: 'remove',
+          label: 'Remove',
+          tooltip: 'Remove folder',
+          icon: 'el-icon-delete',
           disabled: this.disableParseButton,
         },
       ]
@@ -57,10 +57,10 @@ export default {
   },
   methods: {
     callClickEmit(btn) {
-      this.$emit(`${btn.id.toString().toLowerCase()}-click`);
+      this.$emit(`${btn.id.toString().toLowerCase()}-click`)
     },
   },
-};
+}
 </script>
 
 <style scoped>

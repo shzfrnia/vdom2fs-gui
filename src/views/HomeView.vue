@@ -1,7 +1,7 @@
 <template>
   <default-layout>
     <div class="wrapper">
-      <uploader
+      <uploader-input
         accept=".txt"
         tip="Upload or create config file"
         :multiple="false"
@@ -19,23 +19,23 @@
 </template>
 
 <script>
-import { default as DefaultLayout } from "@/layouts/Default";
-import Uploader from "@/components/inputs/Uploader";
-import { mapActions } from "vuex";
+import DefaultLayout from '@/layouts/DefaultLayout'
+import UploaderInput from '@/components/inputs/UploaderInput'
+import { mapActions } from 'vuex'
 
 export default {
-  components: { DefaultLayout, Uploader },
-  name: "Home",
+  components: { DefaultLayout, UploaderInput },
+  name: 'HomeView',
   methods: {
-    ...mapActions("configs", [
-      "openCreateConfigDialog",
-      "openCreateDialogConfigFromFile",
+    ...mapActions('configs', [
+      'openCreateConfigDialog',
+      'openCreateDialogConfigFromFile',
     ]),
     uploaderSuccess({ file }) {
-      this.openCreateDialogConfigFromFile(file);
+      this.openCreateDialogConfigFromFile(file)
     },
   },
-};
+}
 </script>
 
 <style scoped>

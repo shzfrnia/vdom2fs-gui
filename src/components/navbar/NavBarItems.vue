@@ -23,24 +23,24 @@
 </template>
 
 <script>
-import NavBarItem from "./NavBarItem";
-import draggable from "vuedraggable";
-import menuItemContextSetup from "@/api/context-menu/menu-item-context/menu-setup";
+import NavBarItem from './NavBarItem'
+import draggable from 'vuedraggable'
+import menuItemContextSetup from '@/api/context-menu/menu-item-context/menu-setup'
 
 export default {
   setup() {
-    return { ...menuItemContextSetup() };
+    return { ...menuItemContextSetup() }
   },
   data() {
     return {
       dragging: false,
-    };
+    }
   },
   props: {
     modelValue: {
       type: Array,
       default() {
-        return [];
+        return []
       },
       required: true,
     },
@@ -51,8 +51,8 @@ export default {
     },
   },
   components: { NavBarItem, draggable },
-  emits: ["update:modelValue"],
-};
+  emits: ['update:modelValue'],
+}
 </script>
 
 <style scoped>

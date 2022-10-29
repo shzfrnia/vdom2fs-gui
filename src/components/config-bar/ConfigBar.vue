@@ -13,15 +13,15 @@
 </template>
 
 <script>
-import ConfigBarItems from "./ConfigBarItems";
+import ConfigBarItems from './ConfigBarItems'
 
 export default {
   components: { ConfigBarItems },
-  emits: ["export-click", "parse-click", "open-click", "remove-click"],
+  emits: ['export-click', 'parse-click', 'open-click', 'remove-click'],
   props: {
     disableParseButton: Boolean,
   },
-};
+}
 </script>
 
 <style scoped>

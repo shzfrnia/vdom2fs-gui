@@ -1,10 +1,10 @@
-import store from "@/store/index";
+import store from '@/store/index'
 
 export default () => [
   {
-    label: "New config",
+    label: 'New config',
     click() {
-      store.dispatch("configs/openCreateConfigDialog");
+      store.dispatch('configs/openCreateConfigDialog')
     },
   },
-];
+]

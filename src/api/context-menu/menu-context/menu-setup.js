@@ -1,14 +1,14 @@
-import { remote } from "electron";
-const { Menu } = remote;
-import template from "./template";
+import { remote } from 'electron'
+import template from './template'
+const { Menu } = remote
 
 export default () => {
   const openMenuContext = () => {
-    const contextMenuTemplate = template();
+    const contextMenuTemplate = template()
     Menu.buildFromTemplate(contextMenuTemplate).popup({
       window: remote.getCurrentWindow(),
-    });
-  };
+    })
+  }
 
-  return { openMenuContext };
-};
+  return { openMenuContext }
+}

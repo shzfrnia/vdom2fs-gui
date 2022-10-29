@@ -24,12 +24,12 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import { default as DefaultLayout } from "@/layouts/Default";
-import ConfigBar from "@/components/config-bar/ConfigBar";
-import TimelineItems from "@/components/timeline/TimelineItems";
-import configSetup from "./setup";
-import timelineItemContextSetup from "@/api/context-menu/timeline-item-context/menu-setup";
+import { mapActions, mapGetters } from 'vuex'
+import DefaultLayout from '@/layouts/DefaultLayout'
+import ConfigBar from '@/components/config-bar/ConfigBar'
+import TimelineItems from '@/components/timeline/TimelineItems'
+import configSetup from './setup'
+import timelineItemContextSetup from '@/api/context-menu/timeline-item-context/menu-setup'
 
 export default {
   setup() {
@@ -38,81 +38,81 @@ export default {
       openFolderOfExportedApp: openHandler,
       removeExportedApp: removeHandler,
       exportApplication: exportHandler,
-    } = configSetup();
+    } = configSetup()
     const { openMenuItemContext: openTimelineContextMenu } =
-      timelineItemContextSetup();
+      timelineItemContextSetup()
     return {
       parseHandler,
       removeHandler,
       openHandler,
       exportHandler,
       openTimelineContextMenu,
-    };
+    }
   },
   components: { DefaultLayout, ConfigBar, TimelineItems },
   data() {
     return {
       allExportedApps: [],
       activeStates: {},
-    };
+    }
   },
   computed: {
-    ...mapGetters("configs", ["getConfigById"]),
+    ...mapGetters('configs', ['getConfigById']),
     activeExportedApp() {
-      return this.activeStates[this.config.id]?.activeExportedApp;
+      return this.activeStates[this.config.id]?.activeExportedApp
     },
     exportedApps() {
-      return [...this.allExportedApps].reverse();
+      return [...this.allExportedApps].reverse()
     },
     currentExportedApp() {
       return this.exportedApps.filter(
-        (el) => el.name == this.activeExportedApp
-      )[0];
+        (el) => el.name === this.activeExportedApp
+      )[0]
     },
     config() {
-      return { ...this.getConfigById(this.$route.params.id) };
+      return { ...this.getConfigById(this.$route.params.id) }
     },
   },
   methods: {
-    ...mapActions("vdom2fs", ["getConfigExportedApps"]),
+    ...mapActions('vdom2fs', ['getConfigExportedApps']),
     async timelineItemClick(exportedApp) {
       this.activeStates[this.config.id] = {
         ...this.activeStates[this.config.id],
         activeExportedApp: exportedApp,
-      };
+      }
     },
     async itemRightClick(exportedApp) {
       this.openTimelineContextMenu(
         exportedApp,
         this.updateExportedApps,
         this.afterRemoveExportedApp
-      );
+      )
     },
     async setupConfig() {
-      this.updateExportedApps();
+      this.updateExportedApps()
     },
     async updateExportedApps() {
-      this.allExportedApps = await this.getConfigExportedApps(this.config);
+      this.allExportedApps = await this.getConfigExportedApps(this.config)
     },
     async afterRemoveExportedApp() {
       const indexOfApp = this.exportedApps.findIndex(
         (el) => el.appXml === this.currentExportedApp?.appXml
-      );
-      await this.updateExportedApps();
+      )
+      await this.updateExportedApps()
       if (indexOfApp === 0 && this.exportedApps.length > 0) {
-        this.timelineItemClick(this.exportedApps[0].name);
+        this.timelineItemClick(this.exportedApps[0].name)
       } else {
-        this.timelineItemClick(null);
+        this.timelineItemClick(null)
       }
     },
   },
   async beforeUpdate() {
-    this.setupConfig();
+    this.setupConfig()
   },
   async created() {
-    this.setupConfig();
+    this.setupConfig()
   },
-};
+}
 </script>
 
 <style scoped>

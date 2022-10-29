@@ -19,7 +19,7 @@ export default {
     },
     icon: {
       type: String,
-      default: "el-icon-menu",
+      default: 'el-icon-menu',
     },
     label: {
       type: String,
@@ -30,7 +30,7 @@ export default {
       required: true,
     },
   },
-};
+}
 </script>
 
 <style scoped>
@@ -86,8 +86,8 @@ a,
 .wrapper {
   display: grid;
   grid-template-areas:
-    "icon label"
-    "icon url";
+    'icon label'
+    'icon url';
 }
 
 .url-label {

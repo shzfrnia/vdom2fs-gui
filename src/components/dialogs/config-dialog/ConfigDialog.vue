@@ -1,5 +1,5 @@
 <template>
-  <my-dialog
+  <base-dialog
     :dialogTitle="dialogTitle"
     @update:modelValue="onDialogShowUpdate"
     :model-value="show"
@@ -14,17 +14,17 @@
         @update:config="onConfigUpdate"
       />
     </template>
-  </my-dialog>
+  </base-dialog>
 </template>
 
 <script>
-import MyDialog from "@/components/dialogs/Dialog";
-import ConfigForm from "./ConfigForm";
-import { mapActions } from "vuex";
+import BaseDialog from '@/components/dialogs/BaseDialog'
+import ConfigForm from './ConfigForm'
+import { mapActions } from 'vuex'
 
 export default {
-  emits: ["update:show", "update:config"],
-  components: { MyDialog, ConfigForm },
+  emits: ['update:show', 'update:config'],
+  components: { BaseDialog, ConfigForm },
   props: {
     show: {
       type: Boolean,
@@ -34,7 +34,7 @@ export default {
     config: {
       type: Object,
       default() {
-        return {};
+        return {}
       },
       required: true,
     },
@@ -43,39 +43,39 @@ export default {
     return {
       formIsValid: false,
       changedConfig: { ...this.config },
-    };
+    }
   },
   methods: {
-    ...mapActions("configs", ["updateConfig"]),
+    ...mapActions('configs', ['updateConfig']),
     async onConfirmClick() {
-      this.updateConfig(this.changedConfig);
-      this.onDialogShowUpdate(false);
+      this.updateConfig(this.changedConfig)
+      this.onDialogShowUpdate(false)
     },
     async onDialogShowUpdate(value) {
-      this.$emit("update:show", value);
+      this.$emit('update:show', value)
     },
     async onConfigUpdate(newValue) {
-      this.changedConfig = newValue;
-      this.$emit("update:config", newValue);
+      this.changedConfig = newValue
+      this.$emit('update:config', newValue)
     },
     async checkForm() {
-      this.$refs.form.checkForm();
+      this.$refs.form.checkForm()
     },
   },
   watch: {
     show: {
       handler(value) {
         if (value) {
-          this.$refs.form.checkForm(this.config.id < 0 && !this.config.name);
+          this.$refs.form.checkForm(this.config.id < 0 && !this.config.name)
         }
       },
-      flush: "post",
+      flush: 'post',
     },
   },
   computed: {
     dialogTitle() {
-      return `${this.config.id === -1 ? "Create" : "Edit"} application config`;
+      return `${this.config.id === -1 ? 'Create' : 'Edit'} application config`
     },
   },
-};
+}
 </script>

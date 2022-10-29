@@ -9,39 +9,39 @@
 </template>
 
 <script>
-import {default as HeaderAndFooterLayout} from "@/layouts/HeaderAndFooter";
-import { mapActions, mapGetters } from "vuex";
+import HeaderAndFooterLayout from '@/layouts/HeaderAndFooterLayout'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   components: {
     HeaderAndFooterLayout,
   },
   computed: {
-    ...mapGetters("vdom2fs", ["pathErrors"]),
+    ...mapGetters('vdom2fs', ['pathErrors']),
   },
   watch: {
     pathErrors() {
-      this.printPathErrors();
+      this.printPathErrors()
     },
   },
   methods: {
-    ...mapActions("vdom2fs", ["chooseFolder"]),
-    ...mapActions(["notify"]),
-    ...mapActions("notification", ["clearAll"]),
+    ...mapActions('vdom2fs', ['chooseFolder']),
+    ...mapActions(['notify']),
+    ...mapActions('notification', ['clearAll']),
     async printPathErrors() {
-      this.clearAll();
+      this.clearAll()
       this.pathErrors.forEach(async (el) => {
         this.notify({
           title: el.file,
           message: el.message,
           duration: 0,
-          type: "error",
-        });
-      });
+          type: 'error',
+        })
+      })
     },
   },
   created() {
-    this.printPathErrors();
+    this.printPathErrors()
   },
-};
+}
 </script>

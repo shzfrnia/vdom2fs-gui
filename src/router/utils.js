@@ -1,19 +1,19 @@
-import store from "@/store/index";
+import store from '@/store/index'
 
 const redirectIfVdom2fsIsNotSeted = (to, from, next) => {
-  if (!store.getters["vdom2fs/pathIsValid"]) {
-    next({ name: "Setup" });
-    return;
+  if (!store.getters['vdom2fs/pathIsValid']) {
+    next({ name: 'Setup' })
+    return
   }
-  next();
-};
+  next()
+}
 
 const redirecrIfVdom2fsIsCorrect = (to, from, next) => {
-  if (store.getters["vdom2fs/pathIsValid"]) {
-    next({ name: "Home" });
-    return;
+  if (store.getters['vdom2fs/pathIsValid']) {
+    next({ name: 'Home' })
+    return
   }
-  next();
-};
+  next()
+}
 
-export { redirecrIfVdom2fsIsCorrect, redirectIfVdom2fsIsNotSeted };
+export { redirecrIfVdom2fsIsCorrect, redirectIfVdom2fsIsNotSeted }

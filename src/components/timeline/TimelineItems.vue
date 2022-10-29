@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import TimelineItem from "./TimelineItem";
+import TimelineItem from './TimelineItem'
 
 export default {
   components: { TimelineItem },
@@ -22,8 +22,8 @@ export default {
     activeExportedApp: String,
     exportedApps: Array,
   },
-  emits: ["itemClick", "itemRightClick"],
-};
+  emits: ['itemClick', 'itemRightClick'],
+}
 </script>
 
 <style>

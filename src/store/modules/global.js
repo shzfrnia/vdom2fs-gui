@@ -1,33 +1,33 @@
-import notification from "@/store/modules/notification";
-import configs from "@/store/modules/configs";
+import notification from '@/store/modules/notification'
+import configs from '@/store/modules/configs'
 
 const state = () => ({
   loading: false,
-  packageVersion: process.env.PACKAGE_VERSION || "0",
-});
+  packageVersion: process.env.PACKAGE_VERSION || '0',
+})
 
 const mutations = {
   setLoading(state, boolean) {
-    state.loading = boolean;
+    state.loading = boolean
   },
-};
+}
 
 const getters = {
   appVersion(state) {
-    return state.packageVersion;
+    return state.packageVersion
   },
   loading(state) {
-    return state.loading;
+    return state.loading
   },
-};
+}
 
 const actions = {
-  async runWithLoader({commit}, func) {
-    commit("setLoading", true);
-    await func.call();
-    commit("setLoading", false);
-  }
-};
+  async runWithLoader({ commit }, func) {
+    commit('setLoading', true)
+    await func.call()
+    commit('setLoading', false)
+  },
+}
 
 export default {
   modules: { notification, configs },
@@ -35,4 +35,4 @@ export default {
   mutations,
   getters,
   actions,
-};
+}

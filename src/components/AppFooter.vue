@@ -13,17 +13,17 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations, mapActions } from "vuex";
+import { mapGetters, mapMutations, mapActions } from 'vuex'
 
 export default {
   methods: {
-    ...mapMutations("vdom2fs", ["clearPath"]),
-    ...mapActions("vdom2fs", ["chooseFolder"]),
+    ...mapMutations('vdom2fs', ['clearPath']),
+    ...mapActions('vdom2fs', ['chooseFolder']),
   },
   computed: {
-    ...mapGetters("vdom2fs", ["currentPath", "pathIsValid"]),
+    ...mapGetters('vdom2fs', ['currentPath', 'pathIsValid']),
   },
-};
+}
 </script>
 
 <style scoped>

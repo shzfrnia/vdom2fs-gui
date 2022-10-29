@@ -27,17 +27,17 @@ export default {
     tip: {
       type: String,
       required: false,
-      default: "",
+      default: '',
     },
     uploadText: {
       type: String,
       required: false,
-      default: "Drop file here or ",
+      default: 'Drop file here or ',
     },
     uploadSecondaryText: {
       type: String,
       required: false,
-      default: "click to upload",
+      default: 'click to upload',
     },
     multiple: {
       type: Boolean,
@@ -47,7 +47,7 @@ export default {
     accept: {
       type: String,
       required: true,
-      default: "",
+      default: '',
     },
     handlePreview: {
       type: Function,
@@ -63,15 +63,15 @@ export default {
       type: Boolean,
       required: true,
       default: false,
-    }
+    },
   },
   methods: {
     handleChange(file, fileList) {
-      this.$emit("onChange", { file, fileList });
+      this.$emit('onChange', { file, fileList })
     },
     handleSuccess(response, file, fileList) {
-      this.$emit("onSuccess", { response, file, fileList });
+      this.$emit('onSuccess', { response, file, fileList })
     },
   },
-};
+}
 </script>

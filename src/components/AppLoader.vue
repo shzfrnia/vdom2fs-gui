@@ -1,4 +1,3 @@
-
 <template>
   <div
     v-loading="loading"
@@ -6,7 +5,7 @@
     element-loading-spinner="el-icon-loading"
     element-loading-background="rgba(0, 0, 0, 0.8)"
     style="width: 100%; height: 100%"
-    :class="{loading : loading}"
+    :class="{ loading: loading }"
   >
     <slot />
   </div>
@@ -20,7 +19,7 @@ export default {
       default: false,
     },
   },
-};
+}
 </script>
 
 <style scoped>

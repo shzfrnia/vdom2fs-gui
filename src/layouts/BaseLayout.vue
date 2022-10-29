@@ -1,10 +1,9 @@
-
 <template>
   <config-dialog
     v-model:show="configDialog.visible"
     v-model:config="configDialog.config"
   />
-  <loader :loading="$store.getters.loading">
+  <app-loader :loading="$store.getters.loading">
     <div class="common-layout">
       <div class="el-header">
         <slot name="header" />
@@ -21,33 +20,33 @@
         <slot name="footer" />
       </div>
     </div>
-  </loader>
+  </app-loader>
 </template>
 
 <script>
-import Loader from "@/components/Loader";
-import ConfigDialog from "@/components/dialogs/config-dialog/ConfigDialog";
-import { ipcRenderer } from "electron";
-import paddingsMixin from "@/components/utils/paddings-mixin";
+import AppLoader from '@/components/AppLoader'
+import ConfigDialog from '@/components/dialogs/config-dialog/ConfigDialog'
+import { ipcRenderer } from 'electron'
+import paddingsMixin from '@/components/utils/paddings-mixin'
 
 export default {
   mixins: [paddingsMixin],
-  components: { Loader, ConfigDialog },
+  components: { AppLoader, ConfigDialog },
   data() {
     return {
       configDialog: {
         visible: false,
         config: {},
       },
-    };
+    }
   },
   beforeCreate() {
-    ipcRenderer.on("open-config-dialog", (event, config) => {
-      this.configDialog.config = { ...config };
-      this.configDialog.visible = true;
-    });
+    ipcRenderer.on('open-config-dialog', (event, config) => {
+      this.configDialog.config = { ...config }
+      this.configDialog.visible = true
+    })
   },
-};
+}
 </script>
 
 <style scoped>

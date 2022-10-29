@@ -66,17 +66,17 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
-import md5 from "crypto-js/md5";
+import { mapActions } from 'vuex'
+import md5 from 'crypto-js/md5'
 
 export default {
-  emits: ["update:form-valid", "update:config"],
+  emits: ['update:form-valid', 'update:config'],
   props: {
     config: {
       type: Object,
       required: true,
       default() {
-        return {};
+        return {}
       },
     },
     formValid: {
@@ -92,115 +92,115 @@ export default {
         name: [
           {
             required: true,
-            message: "Please input application name",
+            message: 'Please input application name',
           },
           {
             min: 5,
             max: 16,
-            message: "Length should be 5 to 16",
+            message: 'Length should be 5 to 16',
           },
         ],
         appId: [
           {
             required: true,
-            message: "Please input application id",
+            message: 'Please input application id',
           },
         ],
         url: [
           {
             required: true,
-            message: "Please input application url",
-            trigger: ["blur", "input"],
+            message: 'Please input application url',
+            trigger: ['blur', 'input'],
           },
           {
             required: true,
             validator: async (rule, value, callback) => {
               try {
-                await this.checkApplicationUrl(value);
+                await this.checkApplicationUrl(value)
               } catch (e) {
-                callback(new Error(e));
+                callback(new Error(e))
               }
             },
-            //trigger: "blur",
+            // trigger: "blur",
           },
         ],
         user: [
           {
             required: true,
-            message: "Please input user name",
+            message: 'Please input user name',
           },
         ],
         passMd5: [
           {
             required: true,
-            message: "Please input md5 hash of passsword",
+            message: 'Please input md5 hash of passsword',
           },
         ],
       },
       validatedFields: {},
-    };
+    }
   },
   methods: {
-    ...mapActions("vdom2fs", ["checkApplicationUrl"]),
-    ...mapActions(["notify"]),
+    ...mapActions('vdom2fs', ['checkApplicationUrl']),
+    ...mapActions(['notify']),
     passwordToMd5() {
-      this.updateField("passMd5", md5(this.config.passMd5).toString());
+      this.updateField('passMd5', md5(this.config.passMd5).toString())
     },
     async webViewOnload() {
       const appId = await this.$refs.webview.executeJavaScript(
-        "window.APPLICATION_ID"
-      );
+        'window.APPLICATION_ID'
+      )
       if (appId) {
-        this.updateField("appId", appId);
+        this.updateField('appId', appId)
       } else {
         this.notify({
-          title: "Error",
+          title: 'Error',
           message: `Cannot fetch application id on: ${`https://${this.config.url}`}`,
-          type: "error",
-        });
+          type: 'error',
+        })
       }
-      this.fetchingApplicationId = false;
+      this.fetchingApplicationId = false
     },
     async tryFetchApplicationId() {
-      this.fetchingApplicationId = true;
-      this.$refs.webview.removeEventListener("dom-ready", this.webViewOnload);
-      this.$refs.webview.addEventListener("dom-ready", this.webViewOnload);
-      this.$refs.webview.src = `https://${this.config.url}`;
+      this.fetchingApplicationId = true
+      this.$refs.webview.removeEventListener('dom-ready', this.webViewOnload)
+      this.$refs.webview.addEventListener('dom-ready', this.webViewOnload)
+      this.$refs.webview.src = `https://${this.config.url}`
     },
     async updateField(name, value) {
-      const configCopy = { ...this.config };
-      configCopy[name] = value;
-      this.$emit("update:config", configCopy);
+      const configCopy = { ...this.config }
+      configCopy[name] = value
+      this.$emit('update:config', configCopy)
     },
     async onValidate(name, result) {
-      this.validatedFields[name] = result;
+      this.validatedFields[name] = result
     },
     async resetFields() {
-      this.$refs.form.resetFields();
+      this.$refs.form.resetFields()
     },
     checkForm(clearValidate) {
       setTimeout(() => {
         this.$refs.form.validate((isValid, fields) => {
           Object.entries(fields).forEach((el) => {
-            this.validatedFields[el[0]] = false;
-          });
-        });
-        if (clearValidate) this.$refs.form.clearValidate();
-      }, 1);
+            this.validatedFields[el[0]] = false
+          })
+        })
+        if (clearValidate) this.$refs.form.clearValidate()
+      }, 1)
     },
   },
   watch: {
     validatedFields: {
       async handler(value) {
         this.$emit(
-          "update:form-valid",
+          'update:form-valid',
           Object.entries(value).every((el) => el[1])
-        );
+        )
       },
       deep: true,
     },
   },
-};
+}
 </script>
 
 <style>

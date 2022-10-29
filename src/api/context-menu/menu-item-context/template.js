@@ -1,40 +1,40 @@
-import store from "@/store/index";
+import store from '@/store/index'
 
 export default (config, variables) => [
   {
-    label: config.favorite ? "Remove from favorite" : "Add to favorite",
+    label: config.favorite ? 'Remove from favorite' : 'Add to favorite',
     click() {
-      store.commit("configs/setFavorites", {
+      store.commit('configs/setFavorites', {
         id: config.id,
         bool: !config.favorite,
-      });
+      })
     },
   },
   {
-    label: "Edit",
+    label: 'Edit',
     click() {
-      store.dispatch("configs/openConfigDialog", { ...config });
+      store.dispatch('configs/openConfigDialog', { ...config })
     },
   },
   {
-    label: "Export",
+    label: 'Export',
     click() {
-      store.dispatch("configs/exportConfig", { ...config });
+      store.dispatch('configs/exportConfig', { ...config })
     },
   },
   {
-    label: "Reorder",
+    label: 'Reorder',
     checked: variables.reorder.value,
-    type: "checkbox",
+    type: 'checkbox',
     click() {
-      variables.reorder.value = !variables.reorder.value;
+      variables.reorder.value = !variables.reorder.value
     },
   },
-  { type: "separator" },
+  { type: 'separator' },
   {
-    label: "Remove",
+    label: 'Remove',
     click() {
-      store.dispatch("configs/removeConfig", config.id);
+      store.dispatch('configs/removeConfig', config.id)
     },
   },
-];
+]
