@@ -21,7 +21,8 @@
         "max-len": ["error", 140, 2],
         "tabWidth": 2,
         "useTabs": false,
-        "semi": false
+        "semi": false,
+        "endOfLine": "auto"
       },
       {
         "usePrettierrc": true
