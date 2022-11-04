@@ -4,22 +4,22 @@ export default {
     paddingTop: {
       type: String,
       default: '20',
-      required: true,
+      required: false,
     },
     paddingLeft: {
       type: String,
       default: '20',
-      required: true,
+      required: false,
     },
     paddingRight: {
       type: String,
       default: '20',
-      required: true,
+      required: false,
     },
     paddingBottom: {
       type: String,
       default: '20',
-      required: true,
+      required: false,
     },
   },
   computed: {

@@ -51,12 +51,12 @@ export default {
     },
     handlePreview: {
       type: Function,
-      required: true,
+      required: false,
       default: () => {},
     },
     handleRemove: {
       type: Function,
-      required: true,
+      required: false,
       default: () => {},
     },
     showFileList: {
