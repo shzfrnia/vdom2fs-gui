@@ -21,6 +21,16 @@
       </div>
     </div>
   </app-loader>
+  <left-drawer
+    title="Logs"
+    @opened="this.$refs.applicationLogs.scrollToLastLog()"
+    :visible="showLogs"
+    @closed="hideLogs"
+  >
+    <template #body>
+      <application-logs ref="applicationLogs" />
+    </template>
+  </left-drawer>
 </template>
 
 <script>
@@ -28,10 +38,13 @@ import AppLoader from '@/components/AppLoader'
 import ConfigDialog from '@/components/dialogs/config-dialog/ConfigDialog'
 import { ipcRenderer } from 'electron'
 import paddingsMixin from '@/components/utils/paddings-mixin'
+import LeftDrawer from '@/components/drawer/LeftDrawer.vue'
+import { mapMutations, mapState } from 'vuex'
+import ApplicationLogs from '@/components/widgets/ApplicationLogs.vue'
 
 export default {
   mixins: [paddingsMixin],
-  components: { AppLoader, ConfigDialog },
+  components: { AppLoader, ConfigDialog, LeftDrawer, ApplicationLogs },
   data() {
     return {
       configDialog: {
@@ -39,6 +52,14 @@ export default {
         config: {},
       },
     }
+  },
+  computed: {
+    ...mapState({
+      showLogs: (state) => state.logs.show,
+    }),
+  },
+  methods: {
+    ...mapMutations('logs', ['hideLogs']),
   },
   beforeCreate() {
     ipcRenderer.on('open-config-dialog', (event, config) => {

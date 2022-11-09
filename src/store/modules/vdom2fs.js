@@ -126,6 +126,15 @@ const getters = {
 }
 
 const actions = {
+  log({ commit }, logRow) {
+    commit('logs/addLog', logRow, { root: true })
+  },
+  logInfo({ dispatch }, content) {
+    dispatch('log', { content, type: 'info' })
+  },
+  logSuccess({ dispatch }, content) {
+    dispatch('log', { content, type: 'success' })
+  },
   async checkVdom2fsFolderOnValid({ commit, getters, dispatch }, _path) {
     commit('setLoading', true, { root: true })
     let errors = []
@@ -206,15 +215,14 @@ const actions = {
     }
   },
 
-  async __exportApplication({ getters, rootGetters }, config) {
+  async __exportApplication({ dispatch, getters, rootGetters }, config) {
     const tempFileInfo = await FileManager.createTempFile(
       rootGetters['configs/getConfigTextRepresentation'](config)
     )
+    const args = ['-c', tempFileInfo.path]
     const pythonMessage = await Python.execute(
       getters.scriptsFullPath.exporter,
-      {
-        args: ['-c', tempFileInfo.path],
-      }
+      { args }
     )
     FileManager.cleanupTempFiles()
     return pythonMessage
@@ -222,23 +230,21 @@ const actions = {
 
   async exportApplication({ commit, dispatch, getters }, config) {
     commit('setLoading', true, { root: true })
+    dispatch('logInfo', [`Start exporting "${config.name}"`])
     let pythonMessage = ''
     try {
       pythonMessage = await dispatch('__exportApplication', config)
     } catch (err) {
-      // TODO error notification
       commit('setLoading', false, { root: true })
-      return
+      throw new Error(err)
     }
-
-    await FileManager.moveFile(
-      path.join(cwd(), 'exported_app.xml'),
-      path.join(
-        getters.getConfigExportedAppsFolderPath(config),
-        new Date().getTime().toString(),
-        `${config.name}.xml`
-      )
+    const from = path.join(cwd(), 'exported_app.xml')
+    const dest = path.join(
+      getters.getConfigExportedAppsFolderPath(config),
+      new Date().getTime().toString(),
+      `${config.name}.xml`
     )
+    await FileManager.moveFile(from, dest)
     commit('setLoading', false, { root: true })
     return pythonMessage
   },

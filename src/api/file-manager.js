@@ -3,6 +3,7 @@ import fs from 'fs'
 import temp from 'temp'
 import { shell, remote } from 'electron'
 import fastFolderSizeSync from 'fast-folder-size/sync'
+import store from '@/store/index'
 const { dialog } = remote
 
 class FileManager {
@@ -32,7 +33,17 @@ class FileManager {
   }
 
   static cleanupTempFiles() {
+    store.commit(
+      'logs/addLog',
+      { content: ['Start cleanup temp config file'] },
+      { root: true }
+    )
     temp.cleanup()
+    store.commit(
+      'logs/addLog',
+      { content: ['Success'], type: 'success' },
+      { root: true }
+    )
   }
 
   static createTempFile(src) {
@@ -56,8 +67,30 @@ class FileManager {
   }
 
   static async moveFile(from, dest) {
-    await fs.promises.mkdir(path.dirname(dest), { recursive: true })
-    await fs.promises.rename(from, dest)
+    store.commit(
+      'logs/addLog',
+      {
+        content: ['Moving from:', from, 'To:', dest],
+        type: 'info',
+      },
+      { root: true }
+    )
+    try {
+      await fs.promises.mkdir(path.dirname(dest), { recursive: true })
+      await fs.promises.rename(from, dest)
+    } catch (err) {
+      store.commit(
+        'logs/addLog',
+        { content: [`Error moving from:`, from, 'To:', dest], type: 'danger' },
+        { root: true }
+      )
+      throw new Error(err)
+    }
+    store.commit(
+      'logs/addLog',
+      { content: `Success`, type: 'success' },
+      { root: true }
+    )
   }
 
   static readdir(_path) {

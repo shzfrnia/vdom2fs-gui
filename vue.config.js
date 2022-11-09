@@ -7,13 +7,14 @@ module.exports = {
   configureWebpack: {
     plugins: [
       new webpack.DefinePlugin({
-        'process.env': { PACKAGE_VERSION: `"${version}"` },
+        'process.env.PACKAGE_VERSION': `"${version}"`,
       }),
     ],
   },
   pluginOptions: {
     electronBuilder: {
       nodeIntegration: true,
+      customFileProtocol: './',
     },
   },
   chainWebpack: (config) => {
